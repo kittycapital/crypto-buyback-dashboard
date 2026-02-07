@@ -437,7 +437,8 @@ tbody td {
       <strong>Fees (수수료)</strong> = 사용자가 프로토콜에 지불하는 총 금액 → 주식의 <span class="info-highlight">매출액</span><br>
       <strong>Revenue (수익)</strong> = 프로토콜이 가져가는 수익 (LP 보상 제외) → <span class="info-highlight">영업이익</span><br>
       <strong>Holders Revenue</strong> = 토큰 보유자에게 돌아가는 금액 → <span class="info-highlight">배당금 + 자사주매입</span><br><br>
-      💡 <strong>핵심:</strong> 바이백 비율이 높은 체인/프로토콜 = 실제 수익을 투자자에게 환원하는 <strong>"가치주"</strong> 스타일의 크립토 프로젝트!
+      💡 <strong>핵심:</strong> 바이백 비율이 높은 체인/프로토콜 = 실제 수익을 투자자에게 환원하는 <strong>"가치주"</strong> 스타일의 크립토 프로젝트!<br><br>
+      🔥 <strong>대표 사례 — Pump.fun:</strong> Revenue의 <span class="info-highlight">100%</span>를 매일 PUMP 토큰 바이백에 사용. 누적 $98M+ 바이백으로 유통량 6.7% 감소. 주식으로 치면 영업이익 전액을 자사주매입에 쓰는 것과 같습니다.
     </div>
   </div>
 </div>
@@ -561,18 +562,52 @@ const CHAIN_COLORS = {
   'Polygon':{'color':'#8247e5','bg':'rgba(130,71,229,0.15)'},
   'Optimism':{'color':'#ff0420','bg':'rgba(255,4,32,0.15)'},
   'Avalanche':{'color':'#e84142','bg':'rgba(232,65,66,0.15)'},
-  'Tron':{'color':'#ff0013','bg':'rgba(255,0,19,0.15)'},
+  'Tron':{'color':'#eb0029','bg':'rgba(235,0,41,0.15)'},
   'Fantom':{'color':'#1969ff','bg':'rgba(25,105,255,0.15)'},
   'Sui':{'color':'#6fbcf0','bg':'rgba(111,188,240,0.15)'},
   'Aptos':{'color':'#2ed8a3','bg':'rgba(46,216,163,0.15)'},
   'Sonic':{'color':'#ff6600','bg':'rgba(255,102,0,0.15)'},
   'Mantle':{'color':'#9aa0a6','bg':'rgba(154,160,166,0.15)'},
   'zkSync Era':{'color':'#8c8dfc','bg':'rgba(140,141,252,0.15)'},
-  'Hyperliquid':{'color':'#00ff88','bg':'rgba(0,255,136,0.15)'},
+  'ZKsync Era':{'color':'#8c8dfc','bg':'rgba(140,141,252,0.15)'},
+  'Hyperliquid':{'color':'#6ee7b7','bg':'rgba(110,231,183,0.15)'},
+  'Hyperliquid L1':{'color':'#6ee7b7','bg':'rgba(110,231,183,0.15)'},
   'Bitcoin':{'color':'#f7931a','bg':'rgba(247,147,26,0.15)'},
+  'Monad':{'color':'#836ef9','bg':'rgba(131,110,249,0.15)'},
+  'Linea':{'color':'#61dfff','bg':'rgba(97,223,255,0.15)'},
+  'Blast':{'color':'#fcfc03','bg':'rgba(252,252,3,0.15)'},
+  'Scroll':{'color':'#ffeeda','bg':'rgba(255,238,218,0.15)'},
+  'Cronos':{'color':'#002D74','bg':'rgba(0,45,116,0.15)'},
+  'Gnosis':{'color':'#3e6957','bg':'rgba(62,105,87,0.15)'},
+  'Celo':{'color':'#fcff52','bg':'rgba(252,255,82,0.15)'},
+  'Manta':{'color':'#1fc7d4','bg':'rgba(31,199,212,0.15)'},
+  'Berachain':{'color':'#f5a623','bg':'rgba(245,166,35,0.15)'},
+  'Sei':{'color':'#9b1c2e','bg':'rgba(155,28,46,0.15)'},
+  'Near':{'color':'#00ec97','bg':'rgba(0,236,151,0.15)'},
+  'Starknet':{'color':'#ec796b','bg':'rgba(236,121,107,0.15)'},
+  'Cardano':{'color':'#0033ad','bg':'rgba(0,51,173,0.15)'},
+  'Cosmos':{'color':'#6f7390','bg':'rgba(111,115,144,0.15)'},
+  'Injective':{'color':'#00f2fe','bg':'rgba(0,242,254,0.15)'},
+  'TON':{'color':'#0098ea','bg':'rgba(0,152,234,0.15)'},
+  'Polkadot':{'color':'#e6007a','bg':'rgba(230,0,122,0.15)'},
+  'Mode':{'color':'#dffe00','bg':'rgba(223,254,0,0.15)'},
+  'Osmosis':{'color':'#726bff','bg':'rgba(114,107,255,0.15)'},
+  'Terra Classic':{'color':'#5493f7','bg':'rgba(84,147,247,0.15)'},
+  'Algorand':{'color':'#000000','bg':'rgba(100,100,100,0.15)'},
+  'Kaia':{'color':'#ff3d00','bg':'rgba(255,61,0,0.15)'},
 };
 
-function gc(chain) { return CHAIN_COLORS[chain] || {color:'#888',bg:'rgba(136,136,136,0.15)'}; }
+function gc(chain) {
+  if (CHAIN_COLORS[chain]) return CHAIN_COLORS[chain];
+  // Generate a consistent color from chain name
+  let hash = 0;
+  for (let i = 0; i < chain.length; i++) hash = chain.charCodeAt(i) + ((hash << 5) - hash);
+  const h = Math.abs(hash) % 360;
+  const color = `hsl(${h}, 65%, 60%)`;
+  const bg = `hsla(${h}, 65%, 60%, 0.15)`;
+  CHAIN_COLORS[chain] = {color, bg};
+  return {color, bg};
+}
 
 let currentPeriod = '24h';
 let cachedData = null;
