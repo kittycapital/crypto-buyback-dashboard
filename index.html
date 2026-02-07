@@ -276,6 +276,80 @@ body {
 .ratio-bar-track { height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; }
 .ratio-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
 
+/* Protocol Highlights */
+.proto-highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.proto-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.proto-card:hover {
+  border-color: var(--border-light);
+  transform: translateY(-1px);
+}
+.proto-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.proto-card-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.proto-card-rank-badge {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+.proto-card-amount {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.proto-card-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.proto-card-row .label { color: var(--text-muted); }
+.proto-card-row .val { font-weight: 500; }
+.proto-card-bar-track {
+  height: 4px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.proto-card-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+.buyback-100 {
+  display: inline-block;
+  background: rgba(239,68,68,0.15);
+  color: var(--accent-red);
+  font-size: 9px;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-left: 4px;
+}
+
 /* Table */
 .table-section { margin-bottom: 24px; }
 .table-container {
@@ -506,6 +580,15 @@ tbody td {
     </div>
   </div>
 
+  <!-- ========== PROTOCOL HIGHLIGHTS ========== -->
+  <div class="section-header">
+    <div>
+      <div class="section-title"><span class="icon">🔥</span> 바이백 상위 프로토콜 TOP 10</div>
+      <div class="section-desc">Holders Revenue가 가장 많은 개별 프로토콜 · Pump.fun 등 100% 바이백 프로토콜 포함</div>
+    </div>
+  </div>
+  <div class="proto-highlights" id="protoHighlights"></div>
+
   <!-- ========== CHAIN CARDS ========== -->
   <div class="section-header">
     <div>
@@ -595,16 +678,29 @@ const CHAIN_COLORS = {
   'Terra Classic':{'color':'#5493f7','bg':'rgba(84,147,247,0.15)'},
   'Algorand':{'color':'#000000','bg':'rgba(100,100,100,0.15)'},
   'Kaia':{'color':'#ff3d00','bg':'rgba(255,61,0,0.15)'},
+  'OP Mainnet':{'color':'#ff0420','bg':'rgba(255,4,32,0.15)'},
+  'Plasma':{'color':'#44e55c','bg':'rgba(68,229,92,0.15)'},
+  'opBNB':{'color':'#f0b90b','bg':'rgba(240,185,11,0.15)'},
+  'Moonbeam':{'color':'#53cbc8','bg':'rgba(83,203,200,0.15)'},
+  'Aurora':{'color':'#78d64b','bg':'rgba(120,214,75,0.15)'},
+  'Metis':{'color':'#00d2ff','bg':'rgba(0,210,255,0.15)'},
+  'Merlin':{'color':'#f7931a','bg':'rgba(247,147,26,0.15)'},
+  'Flare':{'color':'#e42058','bg':'rgba(228,32,88,0.15)'},
+  'Hedera':{'color':'#8259ef','bg':'rgba(130,89,239,0.15)'},
+  'MultiversX':{'color':'#23f7dd','bg':'rgba(35,247,221,0.15)'},
+  'Solana':{'color':'#00e599','bg':'rgba(0,229,153,0.15)'},
 };
 
 function gc(chain) {
   if (CHAIN_COLORS[chain]) return CHAIN_COLORS[chain];
-  // Generate a consistent color from chain name
+  // Generate a consistent bright color from chain name
   let hash = 0;
   for (let i = 0; i < chain.length; i++) hash = chain.charCodeAt(i) + ((hash << 5) - hash);
   const h = Math.abs(hash) % 360;
-  const color = `hsl(${h}, 65%, 60%)`;
-  const bg = `hsla(${h}, 65%, 60%, 0.15)`;
+  const s = 60 + (Math.abs(hash >> 8) % 20); // 60-80% saturation
+  const l = 55 + (Math.abs(hash >> 16) % 15); // 55-70% lightness (bright on dark bg)
+  const color = `hsl(${h}, ${s}%, ${l}%)`;
+  const bg = `hsla(${h}, ${s}%, ${l}%, 0.15)`;
   CHAIN_COLORS[chain] = {color, bg};
   return {color, bg};
 }
@@ -733,8 +829,53 @@ function renderAll(data) {
     `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} 업데이트`;
 
   renderBarChart(chainList);
+  renderProtoHighlights(protocols);
   renderChainCards(chainList, totalHR);
   renderProtocolTable(protocols);
+}
+
+function renderProtoHighlights(protocols) {
+  const top10 = [...protocols].sort((a,b) => b.holdersRevenue - a.holdersRevenue).slice(0,10);
+  if (!top10.length) {
+    document.getElementById('protoHighlights').innerHTML = '';
+    return;
+  }
+  const maxHR = top10[0].holdersRevenue;
+  // Known 100% buyback protocols
+  const fullBuyback = ['pump.fun','pump','pumpswap'];
+
+  document.getElementById('protoHighlights').innerHTML = top10.map((p, i) => {
+    const cc = gc(p.chain);
+    const pct = maxHR > 0 ? (p.holdersRevenue / maxHR * 100) : 0;
+    const isFullBB = fullBuyback.some(fb => p.name.toLowerCase().includes(fb)) || p.ratio >= 95;
+    const rankColors = ['var(--accent-green)','var(--accent-green)','var(--accent-green)','var(--accent-blue)','var(--accent-blue)'];
+    const rankColor = rankColors[Math.min(i, rankColors.length-1)] || 'var(--text-secondary)';
+    const rankBg = i < 3 ? 'var(--accent-green-dim)' : i < 5 ? 'var(--accent-blue-dim)' : 'var(--bg-primary)';
+
+    return `<div class="proto-card">
+      <div class="proto-card-top">
+        <div class="proto-card-name">
+          <span class="proto-card-rank-badge" style="background:${rankBg};color:${rankColor}">#${i+1}</span>
+          ${p.name}${isFullBB ? '<span class="buyback-100">100% 바이백</span>' : ''}
+        </div>
+        <span class="protocol-chain-badge" style="border-color:${cc.color}40;color:${cc.color}">${p.chain}</span>
+      </div>
+      <div class="proto-card-amount" style="color:var(--accent-green)">${fmtC(p.holdersRevenue)}</div>
+      <div class="proto-card-bar-track">
+        <div class="proto-card-bar-fill" style="width:${pct}%;background:${cc.color}"></div>
+      </div>
+      <div class="proto-card-row">
+        <span class="label">Revenue</span><span class="val">${fmtC(p.revenue)}</span>
+      </div>
+      <div class="proto-card-row">
+        <span class="label">Fees</span><span class="val">${fmtC(p.fees)}</span>
+      </div>
+      <div class="proto-card-row">
+        <span class="label">바이백 비율</span>
+        <span class="val" style="color:${p.ratio>50?'var(--accent-green)':p.ratio>20?'var(--accent-orange)':'var(--text-secondary)'}">${fmtP(p.ratio)}</span>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 function renderBarChart(chains) {
