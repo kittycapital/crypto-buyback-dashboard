@@ -2,468 +2,518 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>크립토 바이백 대시보드 | Protocol Buyback Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>크립토 바이백 대시보드</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg-primary: #0a0a0f;
-  --bg-card: #16161f;
-  --bg-card-hover: #1c1c28;
-  --border: #2a2a3a;
-  --border-light: #353545;
-  --text-primary: #e8e8f0;
-  --text-secondary: #8888a0;
-  --text-muted: #555570;
-  --accent-green: #00e599;
-  --accent-green-dim: rgba(0,229,153,0.15);
-  --accent-blue: #3b82f6;
-  --accent-blue-dim: rgba(59,130,246,0.15);
-  --accent-purple: #a855f7;
-  --accent-purple-dim: rgba(168,85,247,0.15);
-  --accent-orange: #f59e0b;
-  --accent-orange-dim: rgba(245,158,11,0.15);
-  --accent-red: #ef4444;
-  --accent-red-dim: rgba(239,68,68,0.15);
-  --accent-cyan: #06b6d4;
-  --accent-cyan-dim: rgba(6,182,212,0.15);
+:root{
+  --bg:#0a0a0f;--card:#16161f;--card-h:#1c1c28;
+  --brd:#2a2a3a;--brd-l:#353545;
+  --t1:#e8e8f0;--t2:#8888a0;--t3:#555570;
+  --grn:#00e599;--grn-d:rgba(0,229,153,0.15);
+  --blu:#3b82f6;--blu-d:rgba(59,130,246,0.15);
+  --pur:#a855f7;--pur-d:rgba(168,85,247,0.15);
+  --org:#f59e0b;--org-d:rgba(245,158,11,0.15);
+  --red:#ef4444;--red-d:rgba(239,68,68,0.15);
+  --cyn:#06b6d4;--cyn-d:rgba(6,182,212,0.15);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Outfit',sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh;overflow-x:hidden}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 .mono{font-family:'JetBrains Mono',monospace}
 
-/* ===== HEADER ===== */
-.header{padding:24px 28px 20px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(0,229,153,0.03) 0%,transparent 100%)}
-.header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-.header-left{display:flex;align-items:center;gap:14px}
-.logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--accent-green),#00b377);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#0a0a0f;letter-spacing:-1px}
-.header h1{font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--text-primary),var(--accent-green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.header-subtitle{font-size:12px;color:var(--text-muted);margin-top:2px;letter-spacing:0.5px}
-.header-right{display:flex;align-items:center;gap:10px}
-.update-badge{display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;font-size:11px;color:var(--text-secondary)}
-.update-dot{width:6px;height:6px;background:var(--accent-green);border-radius:50%;animation:pulse 2s infinite}
-.update-dot.error{background:var(--accent-red)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-.period-selector{display:flex;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;overflow:hidden}
-.period-btn{padding:6px 14px;font-size:12px;font-weight:500;background:transparent;color:var(--text-secondary);border:none;cursor:pointer;transition:all 0.2s;font-family:'Outfit',sans-serif}
-.period-btn.active{background:var(--accent-green);color:#0a0a0f;font-weight:600}
-.period-btn:hover:not(.active){color:var(--text-primary);background:var(--bg-card-hover)}
+/* === HEADER === */
+.hdr{padding:16px 16px 14px;border-bottom:1px solid var(--brd);background:linear-gradient(180deg,rgba(0,229,153,0.03),transparent)}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.hdr-left{display:flex;align-items:center;gap:10px}
+.logo{width:32px;height:32px;background:linear-gradient(135deg,var(--grn),#00b377);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#0a0a0f}
+.hdr h1{font-size:16px;font-weight:700;background:linear-gradient(135deg,var(--t1),var(--grn));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hdr-sub{font-size:9px;color:var(--t3);letter-spacing:.4px}
+.hdr-right{display:flex;align-items:center;gap:6px}
+.ubadge{display:flex;align-items:center;gap:4px;padding:4px 8px;background:var(--card);border:1px solid var(--brd);border-radius:6px;font-size:9px;color:var(--t2)}
+.udot{width:5px;height:5px;background:var(--grn);border-radius:50%;animation:pulse 2s infinite}
+.udot.err{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.psel{display:flex;background:var(--card);border:1px solid var(--brd);border-radius:6px;overflow:hidden}
+.pbtn{padding:5px 11px;font-size:11px;font-weight:500;background:transparent;color:var(--t2);border:none;cursor:pointer;transition:all .15s;font-family:'Outfit',sans-serif;-webkit-tap-highlight-color:transparent}
+.pbtn.on{background:var(--grn);color:#0a0a0f;font-weight:600}
+.pbtn:active:not(.on){background:var(--card-h)}
 
-/* ===== INFO BANNER ===== */
-.info-banner{margin:20px 28px 0;background:linear-gradient(135deg,rgba(0,229,153,0.06),rgba(59,130,246,0.04));border:1px solid rgba(0,229,153,0.15);border-radius:12px;padding:18px 20px}
-.info-banner-title{font-size:14px;font-weight:600;color:var(--accent-green);margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
-.info-item{display:flex;gap:10px;align-items:flex-start}
-.info-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:1px}
-.info-item-label{font-size:12px;font-weight:600;color:var(--text-primary);margin-bottom:2px}
-.info-item-desc{font-size:11px;color:var(--text-secondary);line-height:1.5}
-.info-toggle{display:flex;align-items:center;gap:6px;background:none;border:none;color:var(--accent-green);font-size:12px;font-weight:500;cursor:pointer;font-family:'Outfit',sans-serif;padding:0;margin-top:12px}
-.info-toggle:hover{text-decoration:underline}
-.info-detail{display:none;margin-top:14px;padding-top:14px;border-top:1px solid rgba(0,229,153,0.1)}
-.info-detail.show{display:block}
-.info-detail-text{font-size:12px;color:var(--text-secondary);line-height:1.7}
-.info-detail-text strong{color:var(--text-primary);font-weight:600}
-.info-highlight{display:inline-block;background:var(--accent-green-dim);color:var(--accent-green);padding:1px 6px;border-radius:4px;font-size:11px;font-weight:500}
-.trad-compare{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;margin-top:12px;align-items:center}
-.trad-compare-box{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;text-align:center}
-.trad-compare-box .label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
-.trad-compare-box .value{font-size:12px;font-weight:600}
-.trad-compare-arrow{font-size:16px;color:var(--text-muted);text-align:center}
+/* === INFO === */
+.info{margin:12px 16px 0;background:linear-gradient(135deg,rgba(0,229,153,0.06),rgba(59,130,246,0.04));border:1px solid rgba(0,229,153,0.15);border-radius:10px;padding:14px}
+.info-title{font-size:12px;font-weight:600;color:var(--grn);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.info-grid{display:grid;grid-template-columns:1fr;gap:8px}
+.info-item{display:flex;gap:7px;align-items:flex-start}
+.info-ic{width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.info-lbl{font-size:11px;font-weight:600;color:var(--t1);margin-bottom:1px}
+.info-desc{font-size:10px;color:var(--t2);line-height:1.45}
+.info-tog{display:flex;align-items:center;gap:4px;background:none;border:none;color:var(--grn);font-size:10px;font-weight:500;cursor:pointer;font-family:'Outfit',sans-serif;padding:0;margin-top:8px;-webkit-tap-highlight-color:transparent}
+.info-det{display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,229,153,0.1)}
+.info-det.show{display:block}
+.info-det-txt{font-size:10px;color:var(--t2);line-height:1.65}
+.info-det-txt strong{color:var(--t1)}
+.ihl{display:inline-block;background:var(--grn-d);color:var(--grn);padding:0 4px;border-radius:3px;font-size:9px;font-weight:500}
+.tcmp{display:grid;grid-template-columns:1fr;gap:6px;margin-top:8px}
+.tcmp-box{background:var(--card);border:1px solid var(--brd);border-radius:6px;padding:7px 10px;text-align:center}
+.tcmp-box .lb{font-size:8px;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.tcmp-box .vl{font-size:10px;font-weight:600}
+.tcmp-arr{font-size:12px;color:var(--t3);text-align:center}
 
-/* ===== SUMMARY ===== */
-.summary-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;padding:20px 28px}
-.summary-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;transition:all 0.3s}
-.summary-card:hover{border-color:var(--border-light);transform:translateY(-1px)}
-.summary-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.tooltip-trigger{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:var(--bg-primary);border:1px solid var(--border);font-size:9px;color:var(--text-muted);cursor:help;position:relative}
-.tooltip-trigger:hover .tooltip-box{display:block}
-.tooltip-box{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:6px;background:#22222e;border:1px solid var(--border-light);border-radius:8px;padding:10px 12px;font-size:11px;color:var(--text-secondary);line-height:1.5;width:220px;z-index:100;font-weight:400;text-transform:none;letter-spacing:0;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
-.tooltip-box::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%) rotate(45deg);width:8px;height:8px;background:#22222e;border-left:1px solid var(--border-light);border-top:1px solid var(--border-light)}
-.summary-value{font-size:24px;font-weight:700;letter-spacing:-0.5px}
-.summary-sub{font-size:11px;color:var(--text-secondary);margin-top:4px}
+/* === SUMMARY === */
+.srow{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 16px}
+.scard{background:var(--card);border:1px solid var(--brd);border-radius:9px;padding:12px 14px}
+.slbl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.ttip{display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;border-radius:50%;background:var(--bg);border:1px solid var(--brd);font-size:7px;color:var(--t3);cursor:help;position:relative}
+.ttip:hover .ttip-box,.ttip:active .ttip-box{display:block}
+.ttip-box{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:4px;background:#22222e;border:1px solid var(--brd-l);border-radius:6px;padding:7px 9px;font-size:9px;color:var(--t2);line-height:1.4;width:160px;z-index:100;font-weight:400;text-transform:none;letter-spacing:0;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.sval{font-size:20px;font-weight:700;letter-spacing:-.5px}
+.ssub{font-size:9px;color:var(--t2);margin-top:2px}
 
-/* ===== MAIN ===== */
-.main-content{padding:0 28px 28px}
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
-.section-title{font-size:15px;font-weight:600;color:var(--text-primary);display:flex;align-items:center;gap:8px}
-.section-title .icon{font-size:16px}
-.section-desc{font-size:11px;color:var(--text-muted)}
+/* === MAIN === */
+.main{padding:0 16px 16px}
+.sec-hd{margin-bottom:10px}
+.sec-t{font-size:13px;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:5px}
+.sec-d{font-size:9px;color:var(--t3);margin-top:1px}
 
-/* ===== BAR CHART ===== */
-.chart-section{margin-bottom:24px}
-.chart-container{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px}
-.bar-chart{display:flex;flex-direction:column;gap:8px}
-.bar-row{display:grid;grid-template-columns:160px 1fr 90px;align-items:center;gap:12px;padding:5px 8px;border-radius:8px;transition:all 0.2s}
-.bar-row:hover{background:rgba(255,255,255,0.02)}
-.bar-proto-name{font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden}
-.bar-chain-icon{width:18px;height:18px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0}
-.bar-method-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.bar-track{height:26px;background:rgba(255,255,255,0.03);border-radius:6px;overflow:hidden}
-.bar-fill{height:100%;border-radius:6px;transition:width 0.8s cubic-bezier(0.25,0.46,0.45,0.94);min-width:2px}
-.bar-value{font-size:13px;font-weight:600;text-align:right;white-space:nowrap}
+/* === BAR CHART (MOBILE-FIRST STACKED) === */
+.chart-sec{margin-bottom:16px}
+.chart-box{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:14px}
+.bchart{display:flex;flex-direction:column;gap:2px}
+.brow{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.02)}
+.brow:last-child{border-bottom:none}
+.brow-top{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:4px}
+.brow-name-area{display:flex;align-items:center;gap:6px;min-width:0;flex:1}
+.brow-ci{width:18px;height:18px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0}
+.brow-mdot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.brow-names{display:flex;flex-direction:column;min-width:0;flex:1}
+.brow-name{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brow-ko{font-size:9px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brow-val{font-size:13px;font-weight:600;white-space:nowrap;flex-shrink:0}
+.brow-bar{height:18px;background:rgba(255,255,255,.03);border-radius:4px;overflow:hidden}
+.brow-fill{height:100%;border-radius:4px;transition:width .8s cubic-bezier(.25,.46,.45,.94);min-width:2px}
 
-/* ===== PROTOCOL CARDS ===== */
-.proto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:24px}
-.proto-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:18px;transition:all 0.3s;display:flex;flex-direction:column;gap:12px}
-.proto-card:hover{border-color:var(--border-light);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.3)}
-.proto-card-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.proto-card-left{display:flex;align-items:center;gap:10px;min-width:0}
-.proto-rank{font-size:18px;font-weight:800;color:var(--text-muted);width:28px;text-align:center;flex-shrink:0}
-.proto-rank.top3{color:var(--accent-green)}
-.proto-name-col{min-width:0}
-.proto-name{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.proto-category{font-size:10px;color:var(--text-muted);margin-top:1px}
-.proto-badges{display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap}
-.chain-badge{display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:500;border:1px solid}
-.chain-badge-icon{width:14px;height:14px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700}
-.method-badge{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:600;display:flex;align-items:center;gap:4px}
-.method-burn{background:var(--accent-red-dim);color:var(--accent-red)}
-.method-stake{background:var(--accent-purple-dim);color:var(--accent-purple)}
-.method-dist{background:var(--accent-cyan-dim);color:var(--accent-cyan)}
-.method-mixed{background:var(--accent-orange-dim);color:var(--accent-orange)}
+/* === PROTOCOL CARDS === */
+.pgrid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:16px}
+.pcard{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px;-webkit-tap-highlight-color:transparent}
+.pcard:active{border-color:var(--brd-l)}
+.pc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px}
+.pc-left{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+.pc-rank{font-size:16px;font-weight:800;color:var(--t3);width:22px;text-align:center;flex-shrink:0}
+.pc-rank.t3{color:var(--grn)}
+.pc-ncol{min-width:0;flex:1}
+.pc-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pc-ko{font-size:10px;color:var(--t3)}
+.pc-cat{font-size:9px;color:var(--t3)}
+.pc-badges{display:flex;gap:3px;flex-wrap:wrap;flex-shrink:0}
+.cbadge{display:flex;align-items:center;gap:3px;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:500;border:1px solid}
+.cbadge-ic{width:12px;height:12px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700}
+.mbadge{padding:2px 6px;border-radius:4px;font-size:9px;font-weight:600;display:flex;align-items:center;gap:2px}
+.mb-burn{background:var(--red-d);color:var(--red)}
+.mb-stake{background:var(--pur-d);color:var(--pur)}
+.mb-dist{background:var(--cyn-d);color:var(--cyn)}
 
-.proto-amount{font-size:22px;font-weight:700;color:var(--accent-green);letter-spacing:-0.5px}
-.proto-amount-sub{font-size:11px;color:var(--text-muted);margin-top:2px}
+.pc-amt{font-size:20px;font-weight:700;color:var(--grn);letter-spacing:-.5px}
+.pc-amt-sub{font-size:10px;color:var(--t3);margin-top:1px}
 
-.proto-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.proto-metric{padding:8px 10px;background:var(--bg-primary);border-radius:8px}
-.proto-metric-label{font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px}
-.proto-metric-value{font-size:14px;font-weight:600}
-.proto-metric-sub{font-size:9px;color:var(--text-secondary);margin-top:1px}
+.pc-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.pc-m{padding:7px 8px;background:var(--bg);border-radius:6px}
+.pc-ml{font-size:8px;color:var(--t3);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px}
+.pc-mv{font-size:12px;font-weight:600}
 
-.proto-ratio{padding:8px 10px;background:var(--bg-primary);border-radius:8px}
-.proto-ratio-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
-.proto-ratio-label{font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px}
-.proto-ratio-val{font-size:12px;font-weight:600}
-.proto-ratio-track{height:5px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}
-.proto-ratio-fill{height:100%;border-radius:3px;transition:width 0.6s ease}
+.pc-ratio{padding:7px 8px;background:var(--bg);border-radius:6px}
+.pc-rh{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.pc-rl{font-size:8px;color:var(--t3);text-transform:uppercase;letter-spacing:.3px}
+.pc-rv{font-size:11px;font-weight:600}
+.pc-rt{height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
+.pc-rf{height:100%;border-radius:2px;transition:width .6s ease}
 
-/* ===== TABLE ===== */
-.table-section{margin-bottom:24px}
-.table-container{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.table-scroll{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:800px}
-thead th{padding:12px 14px;font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.8px;text-align:left;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.01);white-space:nowrap;cursor:pointer;user-select:none;transition:color 0.2s}
-thead th:hover{color:var(--text-secondary)}
-thead th.sorted{color:var(--accent-green)}
-tbody tr{transition:background 0.15s}
-tbody tr:hover{background:rgba(255,255,255,0.02)}
-tbody td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.03);white-space:nowrap}
-.td-chain-badge{font-size:9px;padding:2px 6px;border-radius:4px;background:var(--bg-primary);border:1px solid var(--border)}
-.td-method{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:600}
+/* === TABLE === */
+.tsec{margin-bottom:16px}
+.tbox{background:var(--card);border:1px solid var(--brd);border-radius:10px;overflow:hidden}
+.tscrl{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:680px}
+thead th{padding:9px 10px;font-size:9px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.6px;text-align:left;border-bottom:1px solid var(--brd);background:rgba(255,255,255,.01);white-space:nowrap;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+thead th:hover{color:var(--t2)}
+thead th.sorted{color:var(--grn)}
+tbody tr{transition:background .1s}
+tbody tr:active{background:rgba(255,255,255,.02)}
+tbody td{padding:8px 10px;font-size:11px;border-bottom:1px solid rgba(255,255,255,.03);white-space:nowrap}
+.td-cb{font-size:8px;padding:2px 5px;border-radius:3px;background:var(--bg);border:1px solid var(--brd)}
+.td-mb{font-size:8px;padding:1px 4px;border-radius:3px;font-weight:600}
+.td-name{display:flex;flex-direction:column;gap:1px}
+.td-ko{font-size:9px;color:var(--t3);font-weight:400}
 
-/* ===== LOADING / ERROR ===== */
-.loading-container{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;gap:16px}
-.loading-spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent-green);border-radius:50%;animation:spin 0.8s linear infinite}
+/* === LEGEND === */
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;padding:0 2px}
+.legend-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--t2)}
+.legend-dot{width:8px;height:8px;border-radius:50%}
+
+/* === LOADING / ERROR === */
+.ld-box{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 20px;gap:12px}
+.ld-spin{width:28px;height:28px;border:3px solid var(--brd);border-top-color:var(--grn);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{font-size:13px;color:var(--text-secondary)}
-.error-container{text-align:center;padding:60px 20px}
-.error-icon{font-size:36px;margin-bottom:12px}
-.error-text{font-size:14px;color:var(--text-secondary);margin-bottom:8px}
-.error-sub{font-size:12px;color:var(--text-muted);margin-bottom:16px}
-.retry-btn{padding:8px 20px;background:var(--accent-green);color:#0a0a0f;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:opacity 0.2s}
-.retry-btn:hover{opacity:0.85}
+.ld-txt{font-size:11px;color:var(--t2)}
+.err-box{text-align:center;padding:40px 20px}
+.err-ic{font-size:28px;margin-bottom:8px}
+.err-txt{font-size:12px;color:var(--t2);margin-bottom:5px}
+.err-sub{font-size:10px;color:var(--t3);margin-bottom:12px}
+.retry{padding:6px 16px;background:var(--grn);color:#0a0a0f;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;-webkit-tap-highlight-color:transparent}
 
-/* ===== FOOTER ===== */
-.footer{padding:16px 28px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.footer-text{font-size:11px;color:var(--text-muted)}
-.footer-link{color:var(--accent-green);text-decoration:none}
-.footer-link:hover{text-decoration:underline}
+/* === FOOTER === */
+.ftr{padding:12px 16px;border-top:1px solid var(--brd);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
+.ftr-txt{font-size:9px;color:var(--t3)}
+.ftr-link{color:var(--grn);text-decoration:none}
 
-/* ===== RESPONSIVE ===== */
-@media(max-width:768px){
-  .header{padding:16px}
-  .header h1{font-size:18px}
-  .info-banner{margin:12px 16px 0;padding:14px 16px}
-  .info-grid{grid-template-columns:1fr}
-  .trad-compare{grid-template-columns:1fr;gap:6px}
-  .trad-compare-arrow{transform:rotate(90deg)}
-  .summary-row{padding:12px 16px;gap:8px}
-  .summary-value{font-size:20px}
-  .main-content{padding:0 16px 16px}
-  .proto-grid{grid-template-columns:1fr}
-  .bar-row{grid-template-columns:130px 1fr 80px;gap:8px}
-  .bar-proto-name{font-size:12px}
-  .footer{padding:12px 16px}
-  .period-selector{order:3}
-  .proto-metrics{grid-template-columns:1fr 1fr}
+/* === DESKTOP === */
+@media(min-width:768px){
+  .hdr{padding:20px 24px 16px}
+  .hdr h1{font-size:20px}
+  .info{margin:16px 24px 0;padding:16px 18px}
+  .info-grid{grid-template-columns:repeat(3,1fr)}
+  .tcmp{grid-template-columns:1fr auto 1fr}
+  .srow{grid-template-columns:repeat(4,1fr);padding:16px 24px;gap:10px}
+  .sval{font-size:22px}
+  .main{padding:0 24px 24px}
+  .pgrid{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+  .ftr{padding:14px 24px}
 }
-@media(max-width:480px){
-  .summary-row{grid-template-columns:1fr 1fr}
-  .header-top{flex-direction:column;align-items:flex-start}
+@media(min-width:1200px){
+  .hdr{padding:24px 32px 20px}
+  .hdr h1{font-size:22px}
+  .info{margin:20px 32px 0;padding:18px 20px}
+  .srow{padding:20px 32px;gap:12px}
+  .main{padding:0 32px 32px}
 }
-::-webkit-scrollbar{width:6px;height:6px}
+@media(max-width:380px){
+  .sval{font-size:17px}
+  .pc-amt{font-size:17px}
+  .brow-name{font-size:11px}
+}
+
+/* === IMWEB IFRAME === */
+body.in-iframe{overflow:visible !important}
+::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:var(--border-light)}
+::-webkit-scrollbar-thumb{background:var(--brd);border-radius:2px}
 </style>
 </head>
 <body>
 
-<!-- ===== HEADER ===== -->
-<div class="header">
-  <div class="header-top">
-    <div class="header-left">
-      <div class="logo-icon">BB</div>
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="hdr-left">
+      <div class="logo">BB</div>
       <div>
         <h1>크립토 바이백 대시보드</h1>
-        <div class="header-subtitle">PROTOCOL BUYBACK & TOKEN HOLDER REVENUE TRACKER</div>
+        <div class="hdr-sub">PROTOCOL BUYBACK & HOLDER REVENUE TRACKER</div>
       </div>
     </div>
-    <div class="header-right">
-      <div class="update-badge">
-        <span class="update-dot" id="statusDot"></span>
-        <span id="updateTime">로딩 중...</span>
-      </div>
-      <div class="period-selector">
-        <button class="period-btn active" data-period="24h" onclick="changePeriod('24h')">24H</button>
-        <button class="period-btn" data-period="7d" onclick="changePeriod('7d')">7D</button>
-        <button class="period-btn" data-period="30d" onclick="changePeriod('30d')">30D</button>
+    <div class="hdr-right">
+      <div class="ubadge"><span class="udot" id="sDot"></span><span id="uTime">로딩 중...</span></div>
+      <div class="psel">
+        <button class="pbtn on" data-p="24h" onclick="chgP('24h')">24H</button>
+        <button class="pbtn" data-p="7d" onclick="chgP('7d')">7D</button>
+        <button class="pbtn" data-p="30d" onclick="chgP('30d')">30D</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ===== EXPLANATION ===== -->
-<div class="info-banner">
-  <div class="info-banner-title">💡 크립토 바이백이란?</div>
+<!-- INFO -->
+<div class="info">
+  <div class="info-title">💡 크립토 바이백이란?</div>
   <div class="info-grid">
     <div class="info-item">
-      <div class="info-icon" style="background:var(--accent-green-dim);color:var(--accent-green)">💰</div>
+      <div class="info-ic" style="background:var(--grn-d);color:var(--grn)">💰</div>
       <div>
-        <div class="info-item-label">Holders Revenue (홀더 수익)</div>
-        <div class="info-item-desc">프로토콜 수익 중 <strong>토큰 보유자에게 돌려주는 금액</strong>. 주식의 배당금 + 자사주매입과 같은 개념.</div>
+        <div class="info-lbl">Holders Revenue (홀더 수익)</div>
+        <div class="info-desc">프로토콜 수익 중 <strong>토큰 보유자에게 돌려주는 금액</strong>. 주식의 배당+자사주매입 개념.</div>
       </div>
     </div>
     <div class="info-item">
-      <div class="info-icon" style="background:var(--accent-red-dim);color:var(--accent-red)">🔥</div>
+      <div class="info-ic" style="background:var(--red-d);color:var(--red)">🔥</div>
       <div>
-        <div class="info-item-label">바이백 방식</div>
-        <div class="info-item-desc"><strong>🔥 소각</strong> = 토큰 매입 후 영구 삭제 (공급↓) · <strong>💎 스테이킹</strong> = 보유자에게 보상 · <strong>💸 직접배분</strong> = 수익 분배</div>
+        <div class="info-lbl">바이백 방식</div>
+        <div class="info-desc"><strong>🔥소각</strong>=토큰 삭제(공급↓) · <strong>💎스테이킹</strong>=보유자 보상 · <strong>💸배분</strong>=수익 분배</div>
       </div>
     </div>
     <div class="info-item">
-      <div class="info-icon" style="background:var(--accent-purple-dim);color:var(--accent-purple)">📊</div>
+      <div class="info-ic" style="background:var(--pur-d);color:var(--pur)">📊</div>
       <div>
-        <div class="info-item-label">바이백 비율</div>
-        <div class="info-item-desc">Revenue 대비 Holders Revenue 비율. <strong>높을수록 투자자 환원에 적극적</strong>. 주주환원율과 유사.</div>
+        <div class="info-lbl">바이백 비율</div>
+        <div class="info-desc">Revenue 대비 Holders Revenue. <strong>높을수록 투자자 환원 적극적</strong>.</div>
       </div>
     </div>
   </div>
-  <button class="info-toggle" onclick="toggleDetail()"><span id="toggleIcon">▶</span> 주식 투자자를 위한 상세 비교 보기</button>
-  <div class="info-detail" id="infoDetail">
-    <div class="trad-compare">
-      <div class="trad-compare-box"><div class="label">🏢 주식 (TradFi)</div><div class="value" style="color:var(--accent-blue)">매출 → 영업이익 → 배당 + 자사주매입</div></div>
-      <div class="trad-compare-arrow">≈</div>
-      <div class="trad-compare-box"><div class="label">⛓️ 크립토 (DeFi)</div><div class="value" style="color:var(--accent-green)">Fees → Revenue → Holders Revenue</div></div>
+  <button class="info-tog" onclick="togDet()"><span id="togIc">▶</span> 주식 투자자를 위한 비교</button>
+  <div class="info-det" id="infoDet">
+    <div class="tcmp">
+      <div class="tcmp-box"><div class="lb">🏢 주식</div><div class="vl" style="color:var(--blu)">매출→영업이익→배당+자사주매입</div></div>
+      <div class="tcmp-arr">≈</div>
+      <div class="tcmp-box"><div class="lb">⛓️ 크립토</div><div class="vl" style="color:var(--grn)">Fees→Revenue→Holders Revenue</div></div>
     </div>
-    <div class="info-detail-text" style="margin-top:14px">
-      <strong>Fees</strong> = 사용자 수수료 → <span class="info-highlight">매출액</span> · <strong>Revenue</strong> = 프로토콜 수익 → <span class="info-highlight">영업이익</span> · <strong>Holders Revenue</strong> = 토큰 보유자 환원 → <span class="info-highlight">배당+자사주매입</span><br><br>
-      🔥 <strong>대표 사례 — Pump.fun:</strong> Revenue <span class="info-highlight">100%</span>를 매일 PUMP 토큰 바이백에 사용. 누적 $98M+ 바이백, 유통량 6.7% 감소.
+    <div class="info-det-txt" style="margin-top:10px">
+      <strong>Fees</strong>=사용자 수수료→<span class="ihl">매출액</span> · <strong>Revenue</strong>=프로토콜 수익→<span class="ihl">영업이익</span> · <strong>Holders Revenue</strong>=토큰 보유자 환원→<span class="ihl">배당+자사주매입</span><br><br>
+      🔥 <strong>Pump.fun</strong>: Revenue <span class="ihl">100%</span>를 매일 PUMP 바이백. 누적 $98M+, 유통량 6.7%↓
     </div>
   </div>
 </div>
 
-<!-- ===== SUMMARY ===== -->
-<div class="summary-row">
-  <div class="summary-card">
-    <div class="summary-label">전체 Holders Revenue <span class="tooltip-trigger">?<div class="tooltip-box">전체 프로토콜에서 토큰 보유자에게 환원된 총 금액.</div></span></div>
-    <div class="summary-value" id="totalHR">-</div>
-    <div class="summary-sub" id="totalHRSub">바이백+소각+스테이킹 배분</div>
+<!-- SUMMARY -->
+<div class="srow">
+  <div class="scard">
+    <div class="slbl">전체 바이백 <span class="ttip">?<div class="ttip-box">보유자에게 환원된 총 금액</div></span></div>
+    <div class="sval" id="sHR">-</div>
+    <div class="ssub" id="sHRs">Holders Revenue 합계</div>
   </div>
-  <div class="summary-card">
-    <div class="summary-label">전체 Revenue <span class="tooltip-trigger">?<div class="tooltip-box">프로토콜들의 자체 수익 합계. 주식의 영업이익과 유사.</div></span></div>
-    <div class="summary-value" id="totalRev">-</div>
-    <div class="summary-sub" id="totalRevSub">프로토콜 수익 합계</div>
+  <div class="scard">
+    <div class="slbl">전체 Revenue</div>
+    <div class="sval" id="sRev">-</div>
+    <div class="ssub" id="sRevs">프로토콜 수익 합계</div>
   </div>
-  <div class="summary-card">
-    <div class="summary-label">바이백 비율 <span class="tooltip-trigger">?<div class="tooltip-box">Revenue 중 보유자에게 환원된 비율. 주주환원율과 동일 개념.</div></span></div>
-    <div class="summary-value" id="totalRatio">-</div>
-    <div class="summary-sub">Holders Revenue ÷ Revenue</div>
+  <div class="scard">
+    <div class="slbl">바이백 비율</div>
+    <div class="sval" id="sRat">-</div>
+    <div class="ssub">HR ÷ Revenue</div>
   </div>
-  <div class="summary-card">
-    <div class="summary-label">바이백 프로토콜 수 <span class="tooltip-trigger">?<div class="tooltip-box">Holders Revenue가 존재하는 프로토콜 수.</div></span></div>
-    <div class="summary-value" id="totalCount">-</div>
-    <div class="summary-sub" id="totalCountSub">Holders Revenue 존재</div>
+  <div class="scard">
+    <div class="slbl">프로토콜 수</div>
+    <div class="sval" id="sCnt">-</div>
+    <div class="ssub" id="sCnts">바이백 프로토콜</div>
   </div>
 </div>
 
-<div class="main-content">
-  <!-- ===== BAR CHART ===== -->
-  <div class="chart-section">
-    <div class="section-header">
-      <div>
-        <div class="section-title"><span class="icon">📊</span> 프로토콜별 바이백(Holders Revenue) TOP 15</div>
-        <div class="section-desc">토큰 보유자에게 환원한 금액 기준 상위 프로토콜</div>
-      </div>
+<div class="main">
+  <!-- BAR CHART -->
+  <div class="chart-sec">
+    <div class="sec-hd">
+      <div class="sec-t">📊 프로토콜별 바이백 TOP 15</div>
+      <div class="sec-d">Holders Revenue 기준 상위 프로토콜</div>
     </div>
-    <div class="chart-container">
-      <div class="bar-chart" id="barChart">
-        <div class="loading-container"><div class="loading-spinner"></div><div class="loading-text">DefiLlama API에서 데이터를 가져오는 중...</div></div>
+    <!-- Legend -->
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>🔥 소각</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--pur)"></div>💎 스테이킹</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--cyn)"></div>💸 배분</div>
+    </div>
+    <div class="chart-box">
+      <div class="bchart" id="barChart">
+        <div class="ld-box"><div class="ld-spin"></div><div class="ld-txt">DefiLlama API 로딩 중...</div></div>
       </div>
     </div>
   </div>
 
-  <!-- ===== PROTOCOL CARDS ===== -->
-  <div class="section-header">
-    <div>
-      <div class="section-title"><span class="icon">🔥</span> 바이백 프로토콜 상세 TOP 10</div>
-      <div class="section-desc">바이백 방식 · 체인 · 누적 바이백 · 비율 분석</div>
-    </div>
+  <!-- CARDS -->
+  <div class="sec-hd">
+    <div class="sec-t">🔥 바이백 프로토콜 상세 TOP 10</div>
+    <div class="sec-d">방식 · 체인 · 누적 금액 · 비율</div>
   </div>
-  <div class="proto-grid" id="protoGrid"></div>
+  <div class="pgrid" id="pGrid"></div>
 
-  <!-- ===== TABLE ===== -->
-  <div class="table-section">
-    <div class="section-header">
-      <div>
-        <div class="section-title"><span class="icon">🏆</span> 전체 바이백 프로토콜 목록</div>
-        <div class="section-desc">열 클릭 시 정렬 · Holders Revenue 기준</div>
-      </div>
+  <!-- TABLE -->
+  <div class="tsec">
+    <div class="sec-hd">
+      <div class="sec-t">🏆 전체 바이백 프로토콜</div>
+      <div class="sec-d">열 터치 시 정렬</div>
     </div>
-    <div class="table-container">
-      <div class="table-scroll">
+    <div class="tbox">
+      <div class="tscrl">
         <table>
           <thead><tr>
-            <th onclick="sortTable('rank')">#</th>
-            <th onclick="sortTable('name')">프로토콜</th>
-            <th onclick="sortTable('chain')">체인</th>
-            <th onclick="sortTable('category')">카테고리</th>
+            <th onclick="srt('rank')">#</th>
+            <th onclick="srt('name')">프로토콜</th>
+            <th onclick="srt('chain')">체인</th>
             <th>방식</th>
-            <th onclick="sortTable('holdersRevenue')" class="sorted">Holders Rev. ▼</th>
-            <th onclick="sortTable('revenue')">Revenue</th>
-            <th onclick="sortTable('fees')">Fees</th>
-            <th onclick="sortTable('ratio')">바이백 비율</th>
-            <th onclick="sortTable('allTime')">누적</th>
+            <th onclick="srt('holdersRevenue')" class="sorted">바이백 ▼</th>
+            <th onclick="srt('revenue')">Revenue</th>
+            <th onclick="srt('ratio')">비율</th>
+            <th onclick="srt('allTime')">누적</th>
           </tr></thead>
-          <tbody id="tableBody"><tr><td colspan="10" style="text-align:center;padding:40px;color:var(--text-muted)">로딩 중...</td></tr></tbody>
+          <tbody id="tBody"><tr><td colspan="8" style="text-align:center;padding:30px;color:var(--t3)">로딩 중...</td></tr></tbody>
         </table>
       </div>
     </div>
   </div>
 </div>
 
-<div class="footer">
-  <span class="footer-text">데이터: <a href="https://defillama.com" target="_blank" class="footer-link">DefiLlama</a> 무료 API · 실시간 · Holders Revenue = 바이백&소각 + 수수료소각 + 스테이커배분</span>
-  <span class="footer-text">클레버라 · Klevera YouTube</span>
+<div class="ftr">
+  <span class="ftr-txt">데이터: <a href="https://defillama.com" target="_blank" class="ftr-link">DefiLlama</a> 무료 API · 실시간</span>
+  <span class="ftr-txt">클레버라 · Klevera</span>
 </div>
 
 <script>
-// ===== CHAIN COLORS =====
-const CC={
-  'Ethereum':['#627eea','rgba(98,126,234,0.15)'],
-  'Solana':['#00e599','rgba(0,229,153,0.15)'],
-  'BSC':['#f0b90b','rgba(240,185,11,0.15)'],
-  'Arbitrum':['#28a0f0','rgba(40,160,240,0.15)'],
-  'Base':['#0052ff','rgba(0,82,255,0.15)'],
-  'Polygon':['#8247e5','rgba(130,71,229,0.15)'],
-  'Optimism':['#ff0420','rgba(255,4,32,0.15)'],
-  'OP Mainnet':['#ff0420','rgba(255,4,32,0.15)'],
-  'Avalanche':['#e84142','rgba(232,65,66,0.15)'],
-  'Tron':['#eb0029','rgba(235,0,41,0.15)'],
-  'Sui':['#6fbcf0','rgba(111,188,240,0.15)'],
-  'Aptos':['#2ed8a3','rgba(46,216,163,0.15)'],
-  'Sonic':['#ff6600','rgba(255,102,0,0.15)'],
-  'Hyperliquid':['#6ee7b7','rgba(110,231,183,0.15)'],
-  'Hyperliquid L1':['#6ee7b7','rgba(110,231,183,0.15)'],
-  'Monad':['#836ef9','rgba(131,110,249,0.15)'],
-  'Linea':['#61dfff','rgba(97,223,255,0.15)'],
-  'Blast':['#fcfc03','rgba(252,252,3,0.15)'],
-  'zkSync Era':['#8c8dfc','rgba(140,141,252,0.15)'],
-  'ZKsync Era':['#8c8dfc','rgba(140,141,252,0.15)'],
-  'Bitcoin':['#f7931a','rgba(247,147,26,0.15)'],
-  'Berachain':['#f5a623','rgba(245,166,35,0.15)'],
-  'Sei':['#9b1c2e','rgba(155,28,46,0.15)'],
-  'Near':['#00ec97','rgba(0,236,151,0.15)'],
-  'TON':['#0098ea','rgba(0,152,234,0.15)'],
-  'Cronos':['#002D74','rgba(0,45,116,0.15)'],
-  'Fantom':['#1969ff','rgba(25,105,255,0.15)'],
-  'Scroll':['#ffeeda','rgba(255,238,218,0.15)'],
-  'Starknet':['#ec796b','rgba(236,121,107,0.15)'],
-  'Plasma':['#44e55c','rgba(68,229,92,0.15)'],
-  'Mantle':['#9aa0a6','rgba(154,160,166,0.15)'],
-  'Mode':['#dffe00','rgba(223,254,0,0.15)'],
-  'Gnosis':['#3e6957','rgba(62,105,87,0.15)'],
-  'Injective':['#00f2fe','rgba(0,242,254,0.15)'],
-  'Osmosis':['#726bff','rgba(114,107,255,0.15)'],
-  'Kaia':['#ff3d00','rgba(255,61,0,0.15)'],
+// ===== KOREAN LABELS =====
+const KO={
+  'hyperliquid perps':'하이퍼리퀴드 무기한선물',
+  'pump.fun':'펌프펀 · 밈코인 런치패드',
+  'tron':'트론 · L1 체인',
+  'jupiter perpetual exchange':'주피터 무기한선물',
+  'yield basis':'일드 베이시스 · 수익 프로토콜',
+  'jupiter aggregator':'주피터 DEX 애그리게이터',
+  'aerodrome slipstream':'에어로드롬 · Base DEX',
+  'sky lending':'스카이 렌딩 · 구 MakerDAO',
+  'hyperliquid spot orderbook':'하이퍼리퀴드 현물거래',
+  'uniswap v3':'유니스왑 V3 · DEX',
+  'uniswap v2':'유니스왑 V2 · DEX',
+  'ether.fi liquid':'이더파이 리퀴드 스테이킹',
+  'clanker':'클랭커 · AI 토큰 런치패드',
+  'pancakeswap amm v3':'팬케이크스왑 · DEX',
+  'pancakeswap amm v2':'팬케이크스왑 V2 · DEX',
+  'hyperliquid l1':'하이퍼리퀴드 L1 체인',
+  'ore protocol':'오레 프로토콜',
+  'aave v3':'아베 V3 · 렌딩',
+  'aave v2':'아베 V2 · 렌딩',
+  'aave':'아베 · 렌딩',
+  'gmx':'GMX · 무기한선물',
+  'gmx v2':'GMX V2 · 무기한선물',
+  'raydium':'레이디움 · Solana DEX',
+  'lido':'리도 · 리퀴드 스테이킹',
+  'lido finance':'리도 · 리퀴드 스테이킹',
+  'compound v3':'컴파운드 · 렌딩',
+  'compound':'컴파운드 · 렌딩',
+  'maker':'메이커 · 구 MakerDAO',
+  'sky':'스카이 · 구 MakerDAO',
+  'curve dex':'커브 · 스테이블 DEX',
+  'sushiswap':'스시스왑 · DEX',
+  'sushi':'스시스왑 · DEX',
+  'trader joe':'트레이더조 · DEX',
+  'camelot':'카멜롯 · Arbitrum DEX',
+  'velodrome v2':'벨로드롬 · OP DEX',
+  'velodrome':'벨로드롬 · OP DEX',
+  'jito':'지토 · Solana MEV',
+  'morpho':'모포 · 렌딩',
+  'fluid':'플루이드 · 렌딩+DEX',
+  'ethereum':'이더리움 · L1 체인',
+  'bitcoin':'비트코인',
+  'benqi':'벤치 · Avalanche 렌딩',
+  'marinade':'마리네이드 · Solana 스테이킹',
+  'convex finance':'컨벡스 · Curve 부스터',
+  'pumpswap':'펌프스왑 · Pump.fun DEX',
+  'orca':'오르카 · Solana DEX',
+  'dydx':'dYdX · 무기한선물',
+  'drift':'드리프트 · Solana 무기한선물',
+  'kamino':'카미노 · Solana DeFi',
+  'base':'베이스 · L2 체인',
+  'solana':'솔라나 · L1 체인',
+  'bsc':'바이낸스 스마트체인',
+  'aerodrome':'에어로드롬 · Base DEX',
+  'sparkle':'스파클',
+  'spark':'스파크 · 렌딩',
+  'pendle':'펜들 · 수익률 거래',
+  'stargate':'스타게이트 · 크로스체인',
+  'radiant':'레이디언트 · 렌딩',
+  'synthetix':'신세틱스 · 파생상품',
+  'synapse':'시냅스 · 브릿지',
+  'pancakeswap':'팬케이크스왑 · DEX',
+  'balancer':'밸런서 · DEX',
+  'frax':'프랙스 · 스테이블코인',
+  'thorchain':'토르체인 · 크로스체인 DEX',
+  'eigenlayer':'아이겐레이어 · 리스테이킹',
+  'renzo':'렌조 · 리스테이킹',
+  'ethena':'에테나 · USDe 발행',
+  'usual':'유저얼 · RWA',
+  'mantle':'맨틀 · L2 체인',
+  'blast':'블래스트 · L2 체인',
+  'scroll':'스크롤 · L2 체인',
+  'linea':'리네아 · L2 체인',
+  'polygon':'폴리곤',
+  'arbitrum':'아비트럼 · L2 체인',
+  'optimism':'옵티미즘 · L2 체인',
+  'avalanche':'아발란체 · L1 체인',
+  'sui':'수이 · L1 체인',
+  'aptos':'앱토스 · L1 체인',
+  'near':'니어 · L1 체인',
 };
-function gc(c){
-  if(CC[c]) return {color:CC[c][0],bg:CC[c][1]};
-  let h=0;for(let i=0;i<c.length;i++) h=c.charCodeAt(i)+((h<<5)-h);
-  const hue=Math.abs(h)%360,s=60+(Math.abs(h>>8)%20),l=55+(Math.abs(h>>16)%15);
-  const col=`hsl(${hue},${s}%,${l}%)`,bg=`hsla(${hue},${s}%,${l}%,0.15)`;
-  CC[c]=[col,bg];
-  return {color:col,bg};
+function getKo(name){
+  const n=name.toLowerCase();
+  if(KO[n])return KO[n];
+  for(const[k,v]of Object.entries(KO)){if(n.includes(k)||k.includes(n))return v}
+  return'';
 }
 
-// ===== BUYBACK METHOD MAPPING =====
-// 🔥burn, 💎stake, 💸dist, 🔄mixed
-const METHODS = {
+// ===== CHAIN COLORS =====
+const CC={
+  'Ethereum':['#627eea','rgba(98,126,234,.15)'],'Solana':['#00e599','rgba(0,229,153,.15)'],
+  'BSC':['#f0b90b','rgba(240,185,11,.15)'],'Arbitrum':['#28a0f0','rgba(40,160,240,.15)'],
+  'Base':['#0052ff','rgba(0,82,255,.15)'],'Polygon':['#8247e5','rgba(130,71,229,.15)'],
+  'Optimism':['#ff0420','rgba(255,4,32,.15)'],'OP Mainnet':['#ff0420','rgba(255,4,32,.15)'],
+  'Avalanche':['#e84142','rgba(232,65,66,.15)'],'Tron':['#eb0029','rgba(235,0,41,.15)'],
+  'Sui':['#6fbcf0','rgba(111,188,240,.15)'],'Aptos':['#2ed8a3','rgba(46,216,163,.15)'],
+  'Sonic':['#ff6600','rgba(255,102,0,.15)'],
+  'Hyperliquid':['#6ee7b7','rgba(110,231,183,.15)'],'Hyperliquid L1':['#6ee7b7','rgba(110,231,183,.15)'],
+  'Monad':['#836ef9','rgba(131,110,249,.15)'],'Linea':['#61dfff','rgba(97,223,255,.15)'],
+  'Blast':['#fcfc03','rgba(252,252,3,.15)'],
+  'zkSync Era':['#8c8dfc','rgba(140,141,252,.15)'],'ZKsync Era':['#8c8dfc','rgba(140,141,252,.15)'],
+  'Bitcoin':['#f7931a','rgba(247,147,26,.15)'],'Berachain':['#f5a623','rgba(245,166,35,.15)'],
+  'TON':['#0098ea','rgba(0,152,234,.15)'],'Near':['#00ec97','rgba(0,236,151,.15)'],
+  'Starknet':['#ec796b','rgba(236,121,107,.15)'],'Plasma':['#44e55c','rgba(68,229,92,.15)'],
+  'Mantle':['#9aa0a6','rgba(154,160,166,.15)'],'Scroll':['#ffeeda','rgba(255,238,218,.15)'],
+  'Cronos':['#4169e1','rgba(65,105,225,.15)'],'Fantom':['#1969ff','rgba(25,105,255,.15)'],
+  'Sei':['#e14c4c','rgba(225,76,76,.15)'],'Injective':['#00f2fe','rgba(0,242,254,.15)'],
+  'Mode':['#dffe00','rgba(223,254,0,.15)'],'Gnosis':['#3e6957','rgba(62,105,87,.15)'],
+  'Kaia':['#ff3d00','rgba(255,61,0,.15)'],'Multi':['#888','rgba(136,136,136,.15)'],
+};
+function gc(c){
+  if(CC[c])return{color:CC[c][0],bg:CC[c][1]};
+  let h=0;for(let i=0;i<c.length;i++)h=c.charCodeAt(i)+((h<<5)-h);
+  const hu=Math.abs(h)%360,s=60+(Math.abs(h>>8)%20),l=55+(Math.abs(h>>16)%15);
+  const co=`hsl(${hu},${s}%,${l}%)`,bg=`hsla(${hu},${s}%,${l}%,.15)`;
+  CC[c]=[co,bg];return{color:co,bg};
+}
+
+// ===== METHODS =====
+const MT={
   'pump.fun':'burn','pump':'burn','pumpswap':'burn',
-  'hyperliquid perps':'burn','hyperliquid':'burn','hyperliquid spot orderbook':'burn',
-  'ethereum':'burn','tron':'burn','bitcoin':'burn',
-  'makerdao':'burn','maker':'burn','sky':'burn',
+  'hyperliquid perps':'burn','hyperliquid':'burn','hyperliquid spot orderbook':'burn','hyperliquid l1':'burn',
+  'ethereum':'burn','tron':'burn','bitcoin':'burn','solana':'burn',
+  'makerdao':'burn','maker':'burn','sky':'burn','sky lending':'burn',
   'raydium':'burn','orca':'burn',
+  'jupiter':'burn','jupiter perpetual exchange':'burn','jupiter aggregator':'burn','jupiter dca':'burn',
   'aerodrome':'stake','aerodrome slipstream':'stake',
   'velodrome v2':'stake','velodrome':'stake',
   'aave':'stake','aave v3':'stake','aave v2':'stake',
   'curve dex':'stake','curve finance':'stake','convex finance':'stake',
   'gmx':'stake','gmx v2':'stake',
-  'jupiter':'burn','jupiter dca':'burn','jupiter perpetual exchange':'burn',
   'uniswap v3':'dist','uniswap':'dist','uniswap v2':'dist',
   'sushi':'burn','sushiswap':'burn',
   'lido':'dist','lido finance':'dist',
   'compound':'dist','compound v3':'dist',
   'yield basis':'burn',
-  'sky lending':'burn',
-  'pancakeswap amm v3':'burn','pancakeswap':'burn',
-  'morpho':'dist',
-  'jito':'stake',
-  'marinade':'stake',
-  'benqi':'stake',
-  'trader joe':'burn',
-  'camelot':'stake',
-  'fluid':'dist',
+  'pancakeswap amm v3':'burn','pancakeswap amm v2':'burn','pancakeswap':'burn',
+  'morpho':'dist','fluid':'dist',
+  'jito':'stake','marinade':'stake','benqi':'stake',
+  'trader joe':'burn','camelot':'stake',
+  'clanker':'burn','ether.fi liquid':'stake',
+  'ore protocol':'burn','dydx':'stake','drift':'stake',
+  'pendle':'dist','stargate':'burn',
+  'synthetix':'burn','balancer':'dist',
+  'thorchain':'burn','eigenlayer':'stake',
+  'ethena':'burn','spark':'dist',
 };
-function getMethod(name){
-  const n=name.toLowerCase();
-  if(METHODS[n]) return METHODS[n];
-  // partial match
-  for(const[k,v] of Object.entries(METHODS)){
-    if(n.includes(k)||k.includes(n)) return v;
-  }
-  return null;
+function gm(n){const l=n.toLowerCase();if(MT[l])return MT[l];for(const[k,v]of Object.entries(MT)){if(l.includes(k)||k.includes(l))return v}return null}
+function ml(m){
+  if(m==='burn')return{i:'🔥',t:'소각',c:'mb-burn'};
+  if(m==='stake')return{i:'💎',t:'스테이킹',c:'mb-stake'};
+  if(m==='dist')return{i:'💸',t:'배분',c:'mb-dist'};
+  return{i:'',t:'-',c:''};
 }
-function methodLabel(m){
-  if(m==='burn') return {icon:'🔥',text:'소각',cls:'method-burn'};
-  if(m==='stake') return {icon:'💎',text:'스테이킹',cls:'method-stake'};
-  if(m==='dist') return {icon:'💸',text:'직접배분',cls:'method-dist'};
-  if(m==='mixed') return {icon:'🔄',text:'복합',cls:'method-mixed'};
-  return {icon:'',text:'-',cls:''};
-}
-function methodDotColor(m){
-  if(m==='burn') return 'var(--accent-red)';
-  if(m==='stake') return 'var(--accent-purple)';
-  if(m==='dist') return 'var(--accent-cyan)';
-  return 'var(--text-muted)';
-}
+function mdc(m){return m==='burn'?'var(--red)':m==='stake'?'var(--pur)':m==='dist'?'var(--cyn)':'var(--t3)'}
 
 // ===== STATE =====
-let currentPeriod='24h', cachedData=null, currentSort={key:'holdersRevenue',dir:'desc'};
+let cP='24h',cD=null,cS={key:'holdersRevenue',dir:'desc'};
+function fC(v){if(v==null||isNaN(v))return'-';if(Math.abs(v)>=1e9)return'$'+(v/1e9).toFixed(2)+'B';if(Math.abs(v)>=1e6)return'$'+(v/1e6).toFixed(2)+'M';if(Math.abs(v)>=1e3)return'$'+(v/1e3).toFixed(1)+'K';return'$'+v.toFixed(0)}
+function fP(v){return(v==null||isNaN(v))?'-':v.toFixed(1)+'%'}
+function pk(){return cP==='24h'?'total24h':cP==='7d'?'total7d':'total30d'}
 
-function fmtC(v){if(v==null||isNaN(v))return'-';if(Math.abs(v)>=1e9)return'$'+(v/1e9).toFixed(2)+'B';if(Math.abs(v)>=1e6)return'$'+(v/1e6).toFixed(2)+'M';if(Math.abs(v)>=1e3)return'$'+(v/1e3).toFixed(1)+'K';return'$'+v.toFixed(0)}
-function fmtP(v){return(v==null||isNaN(v))?'-':v.toFixed(1)+'%'}
-function pk(){return currentPeriod==='24h'?'total24h':currentPeriod==='7d'?'total7d':'total30d'}
-
-function changePeriod(p){
-  currentPeriod=p;
-  document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelector(`[data-period="${p}"]`).classList.add('active');
-  if(cachedData)renderAll(cachedData);
+function chgP(p){
+  cP=p;
+  document.querySelectorAll('.pbtn').forEach(b=>b.classList.remove('on'));
+  document.querySelector(`[data-p="${p}"]`).classList.add('on');
+  if(cD)renderAll(cD);
 }
-function toggleDetail(){
-  const d=document.getElementById('infoDetail'),i=document.getElementById('toggleIcon');
+function togDet(){
+  const d=document.getElementById('infoDet'),i=document.getElementById('togIc');
   d.classList.toggle('show');i.textContent=d.classList.contains('show')?'▼':'▶';
 }
 
@@ -475,181 +525,171 @@ async function fetchData(){
       fetch('https://api.llama.fi/overview/fees?dataType=dailyHoldersRevenue'),
       fetch('https://api.llama.fi/overview/fees?dataType=dailyRevenue')
     ]);
-    if(!fR.ok||!hR.ok||!rR.ok)throw new Error('API error');
-    cachedData={fees:await fR.json(),holders:await hR.json(),revenue:await rR.json()};
-    document.getElementById('statusDot').classList.remove('error');
-    renderAll(cachedData);
+    if(!fR.ok||!hR.ok||!rR.ok)throw new Error('err');
+    cD={f:await fR.json(),h:await hR.json(),r:await rR.json()};
+    document.getElementById('sDot').classList.remove('err');
+    renderAll(cD);
   }catch(e){
     console.error(e);
-    document.getElementById('statusDot').classList.add('error');
-    document.getElementById('updateTime').textContent='연결 실패';
-    showError();
+    document.getElementById('sDot').classList.add('err');
+    document.getElementById('uTime').textContent='연결 실패';
+    showErr();
   }
 }
-
-function showError(){
-  document.getElementById('barChart').innerHTML=`<div class="error-container"><div class="error-icon">⚠️</div><div class="error-text">DefiLlama API 연결 실패</div><div class="error-sub">GitHub Pages 배포 시 정상 동작합니다</div><button class="retry-btn" onclick="fetchData()">다시 시도</button></div>`;
-  document.getElementById('protoGrid').innerHTML='';
-  document.getElementById('tableBody').innerHTML='<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--text-muted)">데이터를 불러올 수 없습니다</td></tr>';
+function showErr(){
+  document.getElementById('barChart').innerHTML=`<div class="err-box"><div class="err-ic">⚠️</div><div class="err-txt">API 연결 실패</div><div class="err-sub">GitHub Pages에 배포하면 정상 동작합니다</div><button class="retry" onclick="fetchData()">다시 시도</button></div>`;
+  document.getElementById('pGrid').innerHTML='';
+  document.getElementById('tBody').innerHTML='<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--t3)">데이터를 불러올 수 없습니다</td></tr>';
 }
 
 // ===== RENDER =====
-function renderAll(data){
-  const key=pk();
-  const hMap={},rMap={};
-  (data.holders.protocols||[]).forEach(h=>{hMap[h.name]=h});
-  (data.revenue.protocols||[]).forEach(r=>{rMap[r.name]=r});
+function renderAll(d){
+  const k=pk(),hM={},rM={};
+  (d.h.protocols||[]).forEach(h=>{hM[h.name]=h});
+  (d.r.protocols||[]).forEach(r=>{rM[r.name]=r});
 
-  const protocols=(data.fees.protocols||[]).map(p=>{
-    const hm=hMap[p.name],rm=rMap[p.name];
-    const holdersRevenue=hm?(hm[key]||0):0;
-    const revenue=rm?(rm[key]||0):0;
-    const fees=p[key]||0;
-    const allTime=hm?(hm.totalAllTime||0):0;
-    return {
-      name:p.name||'Unknown',
-      chains:p.chains||[],
-      chain:(p.chains&&p.chains.length>0)?p.chains[0]:'Multi',
+  const protos=(d.f.protocols||[]).map(p=>{
+    const hm=hM[p.name],rm=rM[p.name];
+    const hr=hm?(hm[k]||0):0,rev=rm?(rm[k]||0):0,fees=p[k]||0;
+    const at=hm?(hm.totalAllTime||0):0;
+    return{
+      name:p.name||'?',chains:p.chains||[],
+      chain:(p.chains&&p.chains[0])||'Multi',
       category:p.category||'-',
-      fees, revenue, holdersRevenue, allTime,
-      ratio:revenue>0?(holdersRevenue/revenue*100):0,
-      method:getMethod(p.name||'')
+      fees,revenue:rev,holdersRevenue:hr,allTime:at,
+      ratio:rev>0?(hr/rev*100):0,
+      method:gm(p.name||''),
+      ko:getKo(p.name||'')
     };
   }).filter(p=>p.holdersRevenue>0);
 
-  // Totals
-  const totalHR=protocols.reduce((s,p)=>s+p.holdersRevenue,0);
-  const totalRev=protocols.reduce((s,p)=>s+p.revenue,0);
-  const totalRatio=totalRev>0?(totalHR/totalRev*100):0;
+  const tHR=protos.reduce((s,p)=>s+p.holdersRevenue,0);
+  const tRev=protos.reduce((s,p)=>s+p.revenue,0);
 
-  document.getElementById('totalHR').textContent=fmtC(totalHR);
-  document.getElementById('totalHRSub').textContent=`바이백+소각+스테이킹 배분 (${currentPeriod})`;
-  document.getElementById('totalRev').textContent=fmtC(totalRev);
-  document.getElementById('totalRevSub').textContent=`프로토콜 수익 합계 (${currentPeriod})`;
-  document.getElementById('totalRatio').textContent=fmtP(totalRatio);
-  document.getElementById('totalCount').textContent=protocols.length;
-  document.getElementById('totalCountSub').textContent=`Holders Revenue 존재 (${currentPeriod})`;
+  document.getElementById('sHR').textContent=fC(tHR);
+  document.getElementById('sHRs').textContent=`바이백 합계 (${cP})`;
+  document.getElementById('sRev').textContent=fC(tRev);
+  document.getElementById('sRevs').textContent=`프로토콜 수익 (${cP})`;
+  document.getElementById('sRat').textContent=fP(tRev>0?tHR/tRev*100:0);
+  document.getElementById('sCnt').textContent=protos.length;
+  document.getElementById('sCnts').textContent=`바이백 프로토콜 (${cP})`;
 
   const now=new Date();
-  document.getElementById('updateTime').textContent=`${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} 업데이트`;
+  document.getElementById('uTime').textContent=`${now.getMonth()+1}/${now.getDate()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
-  const sorted=[...protocols].sort((a,b)=>b.holdersRevenue-a.holdersRevenue);
-  renderBarChart(sorted.slice(0,15));
-  renderProtoCards(sorted.slice(0,10));
-  renderTable(protocols);
+  const sorted=[...protos].sort((a,b)=>b.holdersRevenue-a.holdersRevenue);
+  renderBar(sorted.slice(0,15));
+  renderCards(sorted.slice(0,10));
+  renderTable(protos);
+  sendH();
 }
 
-function renderBarChart(list){
-  if(!list.length){document.getElementById('barChart').innerHTML='<div style="text-align:center;padding:40px;color:var(--text-muted)">데이터 없음</div>';return}
+function renderBar(list){
+  if(!list.length){document.getElementById('barChart').innerHTML='<div style="text-align:center;padding:40px;color:var(--t3)">데이터 없음</div>';return}
   const mx=list[0].holdersRevenue;
   document.getElementById('barChart').innerHTML=list.map(p=>{
-    const cc=gc(p.chain);
-    const pct=mx>0?(p.holdersRevenue/mx*100):0;
-    const mDot=methodDotColor(p.method);
-    return `<div class="bar-row">
-      <div class="bar-proto-name">
-        <div class="bar-chain-icon" style="background:${cc.bg};color:${cc.color}">${p.chain.charAt(0)}</div>
-        <span class="bar-method-dot" style="background:${mDot}"></span>
-        ${p.name}
-      </div>
-      <div class="bar-track"><div class="bar-fill" style="width:0%;background:linear-gradient(90deg,${cc.color},${cc.color}aa)" data-w="${pct}"></div></div>
-      <div class="bar-value mono" style="color:${cc.color}">${fmtC(p.holdersRevenue)}</div>
-    </div>`;
-  }).join('');
-  requestAnimationFrame(()=>{setTimeout(()=>{document.querySelectorAll('.bar-fill').forEach(el=>{el.style.width=el.dataset.w+'%'})},50)});
-}
-
-function renderProtoCards(list){
-  document.getElementById('protoGrid').innerHTML=list.map((p,i)=>{
-    const cc=gc(p.chain);
-    const m=p.method?methodLabel(p.method):null;
-    const ratio=p.ratio;
-    const rColor=ratio>50?'var(--accent-green)':ratio>20?'var(--accent-orange)':'var(--text-secondary)';
-    const isFullBB=ratio>=95;
-
-    // Multi-chain badges
-    const chainBadges=(p.chains.length>0?p.chains.slice(0,3):[p.chain]).map(c=>{
-      const ccc=gc(c);
-      return `<span class="chain-badge" style="color:${ccc.color};border-color:${ccc.color}30"><span class="chain-badge-icon" style="background:${ccc.bg};color:${ccc.color}">${c.charAt(0)}</span>${c}</span>`;
-    }).join('');
-
-    return `<div class="proto-card">
-      <div class="proto-card-top">
-        <div class="proto-card-left">
-          <span class="proto-rank ${i<3?'top3':''}">${i+1}</span>
-          <div class="proto-name-col">
-            <div class="proto-name">${p.name}</div>
-            <div class="proto-category">${p.category}</div>
+    const cc=gc(p.chain),pct=mx>0?(p.holdersRevenue/mx*100):0,md=mdc(p.method);
+    return`<div class="brow">
+      <div class="brow-top">
+        <div class="brow-name-area">
+          <div class="brow-ci" style="background:${cc.bg};color:${cc.color}">${p.chain.charAt(0)}</div>
+          <span class="brow-mdot" style="background:${md}"></span>
+          <div class="brow-names">
+            <span class="brow-name">${p.name}</span>
+            ${p.ko?`<span class="brow-ko">${p.ko}</span>`:''}
           </div>
         </div>
-        <div class="proto-badges">
-          ${m?`<span class="method-badge ${m.cls}">${m.icon} ${m.text}${isFullBB?' (100%)':''}</span>`:''}
+        <div class="brow-val mono" style="color:${cc.color}">${fC(p.holdersRevenue)}</div>
+      </div>
+      <div class="brow-bar"><div class="brow-fill" style="width:0%;background:linear-gradient(90deg,${cc.color},${cc.color}99)" data-w="${pct}"></div></div>
+    </div>`;
+  }).join('');
+  requestAnimationFrame(()=>{setTimeout(()=>{document.querySelectorAll('.brow-fill').forEach(el=>{el.style.width=el.dataset.w+'%'})},50)});
+}
+
+function renderCards(list){
+  document.getElementById('pGrid').innerHTML=list.map((p,i)=>{
+    const cc=gc(p.chain),m=p.method?ml(p.method):null;
+    const r=p.ratio,rc=r>50?'var(--grn)':r>20?'var(--org)':'var(--t2)';
+    const cbs=(p.chains.length>0?p.chains.slice(0,2):[p.chain]).map(c=>{
+      const x=gc(c);return`<span class="cbadge" style="color:${x.color};border-color:${x.color}30"><span class="cbadge-ic" style="background:${x.bg};color:${x.color}">${c.charAt(0)}</span>${c}</span>`;
+    }).join('');
+    return`<div class="pcard">
+      <div class="pc-top">
+        <div class="pc-left">
+          <span class="pc-rank ${i<3?'t3':''}">${i+1}</span>
+          <div class="pc-ncol">
+            <div class="pc-name">${p.name}</div>
+            ${p.ko?`<div class="pc-ko">${p.ko}</div>`:''}
+            <div class="pc-cat">${p.category}</div>
+          </div>
+        </div>
+        <div class="pc-badges">
+          ${m?`<span class="mbadge ${m.c}">${m.i} ${m.t}${r>=95?' 100%':''}</span>`:''}
         </div>
       </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">${chainBadges}</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap">${cbs}</div>
       <div>
-        <div class="proto-amount">${fmtC(p.holdersRevenue)}</div>
-        ${p.allTime>0?`<div class="proto-amount-sub">누적 바이백: ${fmtC(p.allTime)}</div>`:''}
+        <div class="pc-amt">${fC(p.holdersRevenue)}</div>
+        ${p.allTime>0?`<div class="pc-amt-sub">누적 바이백: ${fC(p.allTime)}</div>`:''}
       </div>
-      <div class="proto-metrics">
-        <div class="proto-metric">
-          <div class="proto-metric-label">Revenue</div>
-          <div class="proto-metric-value">${fmtC(p.revenue)}</div>
-        </div>
-        <div class="proto-metric">
-          <div class="proto-metric-label">Fees</div>
-          <div class="proto-metric-value">${fmtC(p.fees)}</div>
-        </div>
-        <div class="proto-metric">
-          <div class="proto-metric-label">바이백 비율</div>
-          <div class="proto-metric-value" style="color:${rColor}">${fmtP(ratio)}</div>
-        </div>
+      <div class="pc-metrics">
+        <div class="pc-m"><div class="pc-ml">Revenue</div><div class="pc-mv">${fC(p.revenue)}</div></div>
+        <div class="pc-m"><div class="pc-ml">Fees</div><div class="pc-mv">${fC(p.fees)}</div></div>
+        <div class="pc-m"><div class="pc-ml">바이백 비율</div><div class="pc-mv" style="color:${rc}">${fP(r)}</div></div>
       </div>
-      <div class="proto-ratio">
-        <div class="proto-ratio-header">
-          <span class="proto-ratio-label">Revenue → Holders Revenue 환원</span>
-          <span class="proto-ratio-val" style="color:${rColor}">${fmtP(ratio)}</span>
-        </div>
-        <div class="proto-ratio-track">
-          <div class="proto-ratio-fill" style="width:${Math.min(ratio,100)}%;background:${rColor}"></div>
-        </div>
+      <div class="pc-ratio">
+        <div class="pc-rh"><span class="pc-rl">Revenue → 보유자 환원</span><span class="pc-rv" style="color:${rc}">${fP(r)}</span></div>
+        <div class="pc-rt"><div class="pc-rf" style="width:${Math.min(r,100)}%;background:${rc}"></div></div>
       </div>
     </div>`;
   }).join('');
 }
 
-function renderTable(protocols){
-  const sorted=[...protocols].sort((a,b)=>{
-    const d=currentSort.dir==='desc'?-1:1,k=currentSort.key;
-    if(k==='name'||k==='chain'||k==='category') return d*-1*(a[k]||'').localeCompare(b[k]||'');
+function renderTable(protos){
+  const sorted=[...protos].sort((a,b)=>{
+    const d=cS.dir==='desc'?-1:1,k=cS.key;
+    if(k==='name'||k==='chain'||k==='category')return d*-1*(a[k]||'').localeCompare(b[k]||'');
     return d*((b[k]||0)-(a[k]||0));
   }).slice(0,30);
-
-  document.getElementById('tableBody').innerHTML=sorted.map((p,i)=>{
-    const cc=gc(p.chain);
-    const m=p.method?methodLabel(p.method):null;
-    const rColor=p.ratio>50?'var(--accent-green)':p.ratio>20?'var(--accent-orange)':'var(--text-secondary)';
-    return `<tr>
-      <td class="mono" style="color:var(--text-muted)">${i+1}</td>
-      <td style="font-weight:500">${p.name}</td>
-      <td><span class="td-chain-badge" style="border-color:${cc.color}40;color:${cc.color}">${p.chain}</span></td>
-      <td style="color:var(--text-secondary)">${p.category}</td>
-      <td>${m?`<span class="td-method ${m.cls}">${m.icon} ${m.text}</span>`:'-'}</td>
-      <td class="mono" style="font-weight:600;color:var(--accent-green)">${fmtC(p.holdersRevenue)}</td>
-      <td class="mono">${fmtC(p.revenue)}</td>
-      <td class="mono">${fmtC(p.fees)}</td>
-      <td class="mono" style="color:${rColor}">${fmtP(p.ratio)}</td>
-      <td class="mono" style="color:var(--text-secondary)">${p.allTime>0?fmtC(p.allTime):'-'}</td>
+  document.getElementById('tBody').innerHTML=sorted.map((p,i)=>{
+    const cc=gc(p.chain),m=p.method?ml(p.method):null;
+    const rc=p.ratio>50?'var(--grn)':p.ratio>20?'var(--org)':'var(--t2)';
+    return`<tr>
+      <td class="mono" style="color:var(--t3)">${i+1}</td>
+      <td><div class="td-name"><span style="font-weight:500">${p.name}</span>${p.ko?`<span class="td-ko">${p.ko}</span>`:''}</div></td>
+      <td><span class="td-cb" style="border-color:${cc.color}40;color:${cc.color}">${p.chain}</span></td>
+      <td>${m?`<span class="td-mb ${m.c}">${m.i}${m.t}</span>`:'-'}</td>
+      <td class="mono" style="font-weight:600;color:var(--grn)">${fC(p.holdersRevenue)}</td>
+      <td class="mono">${fC(p.revenue)}</td>
+      <td class="mono" style="color:${rc}">${fP(p.ratio)}</td>
+      <td class="mono" style="color:var(--t2)">${p.allTime>0?fC(p.allTime):'-'}</td>
     </tr>`;
   }).join('');
 }
 
-function sortTable(key){
-  if(currentSort.key===key) currentSort.dir=currentSort.dir==='desc'?'asc':'desc';
-  else currentSort={key,dir:'desc'};
+function srt(key){
+  if(cS.key===key)cS.dir=cS.dir==='desc'?'asc':'desc';
+  else cS={key,dir:'desc'};
   document.querySelectorAll('thead th').forEach(th=>th.classList.remove('sorted'));
-  if(cachedData)renderAll(cachedData);
+  if(cD)renderAll(cD);
 }
+
+// ===== IMWEB IFRAME AUTO-HEIGHT =====
+function sendH(){
+  try{
+    const h=document.documentElement.scrollHeight;
+    window.parent.postMessage({type:'resize',height:h},'*');
+    window.parent.postMessage(JSON.stringify({type:'resize',height:h}),'*');
+    if(window.frameElement){
+      window.frameElement.style.height=h+'px';
+      window.frameElement.style.overflow='visible';
+    }
+  }catch(e){}
+}
+if(window!==window.top){document.body.classList.add('in-iframe')}
+window.addEventListener('resize',()=>{clearTimeout(window._rto);window._rto=setTimeout(()=>{if(cD)sendH()},150)});
+new MutationObserver(()=>{sendH()}).observe(document.body,{childList:true,subtree:true});
 
 fetchData();
 </script>
