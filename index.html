@@ -2,15 +2,18 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>크립토 바이백 대시보드</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js"></script>
 <style>
 :root{
-  --bg:#0a0a0f;--card:#16161f;--card-h:#1c1c28;
-  --brd:#2a2a3a;--brd-l:#353545;
-  --t1:#e8e8f0;--t2:#8888a0;--t3:#555570;
-  --grn:#00e599;--grn-d:rgba(0,229,153,0.15);
+  --bg:#000;--card:#0a0a0a;--card-h:#111;
+  --brd:#1a1a1a;--brd-l:#27272a;
+  --t1:#e4e4e7;--t2:#a1a1aa;--t3:#71717a;
+  --acc:#a78bfa;--acc-d:rgba(167,139,250,0.15);
+  --grn:#22c55e;--grn-d:rgba(34,197,94,0.15);
   --blu:#3b82f6;--blu-d:rgba(59,130,246,0.15);
   --pur:#a855f7;--pur-d:rgba(168,85,247,0.15);
   --org:#f59e0b;--org-d:rgba(245,158,11,0.15);
@@ -18,41 +21,40 @@
   --cyn:#06b6d4;--cyn-d:rgba(6,182,212,0.15);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+html{scrollbar-width:none;-webkit-text-size-adjust:100%}
+html::-webkit-scrollbar{display:none}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 .mono{font-family:'JetBrains Mono',monospace}
 
+/* === NAV === */
+.top-nav{position:sticky;top:0;z-index:100;background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--brd);padding:0 16px;display:flex;align-items:center;justify-content:center;height:52px}
+.nav-title{font-size:14px;font-weight:600;color:var(--t1);white-space:nowrap}
+
 /* === HEADER === */
-.hdr{padding:16px 16px 14px;border-bottom:1px solid var(--brd);background:linear-gradient(180deg,rgba(0,229,153,0.03),transparent)}
-.hdr-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.hdr-left{display:flex;align-items:center;gap:10px}
-.logo{width:32px;height:32px;background:linear-gradient(135deg,var(--grn),#00b377);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#0a0a0f}
-.hdr h1{font-size:16px;font-weight:700;background:linear-gradient(135deg,var(--t1),var(--grn));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hdr-sub{font-size:9px;color:var(--t3);letter-spacing:.4px}
-.hdr-right{display:flex;align-items:center;gap:6px}
-.ubadge{display:flex;align-items:center;gap:4px;padding:4px 8px;background:var(--card);border:1px solid var(--brd);border-radius:6px;font-size:9px;color:var(--t2)}
+.hdr{padding:12px 16px;display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.ubadge{display:flex;align-items:center;gap:4px;padding:4px 8px;background:var(--card);border:1px solid var(--brd);border-radius:6px;font-size:10px;color:var(--t2);font-family:'JetBrains Mono',monospace}
 .udot{width:5px;height:5px;background:var(--grn);border-radius:50%;animation:pulse 2s infinite}
 .udot.err{background:var(--red)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .psel{display:flex;background:var(--card);border:1px solid var(--brd);border-radius:6px;overflow:hidden}
-.pbtn{padding:5px 11px;font-size:11px;font-weight:500;background:transparent;color:var(--t2);border:none;cursor:pointer;transition:all .15s;font-family:'Outfit',sans-serif;-webkit-tap-highlight-color:transparent}
-.pbtn.on{background:var(--grn);color:#0a0a0f;font-weight:600}
+.pbtn{padding:6px 12px;font-size:11px;font-weight:500;background:transparent;color:var(--t2);border:none;cursor:pointer;transition:all .15s;font-family:'JetBrains Mono',monospace;-webkit-tap-highlight-color:transparent}
+.pbtn.on{background:var(--acc);color:#000;font-weight:600}
 .pbtn:active:not(.on){background:var(--card-h)}
 
 /* === INFO === */
-.info{margin:12px 16px 0;background:linear-gradient(135deg,rgba(0,229,153,0.06),rgba(59,130,246,0.04));border:1px solid rgba(0,229,153,0.15);border-radius:10px;padding:14px}
-.info-title{font-size:12px;font-weight:600;color:var(--grn);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.info{margin:0 16px 12px;background:rgba(167,139,250,0.04);border:1px solid rgba(167,139,250,0.12);border-radius:10px;padding:14px}
+.info-title{font-size:12px;font-weight:600;color:var(--acc);margin-bottom:8px;display:flex;align-items:center;gap:5px}
 .info-grid{display:grid;grid-template-columns:1fr;gap:8px}
 .info-item{display:flex;gap:7px;align-items:flex-start}
 .info-ic{width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
 .info-lbl{font-size:11px;font-weight:600;color:var(--t1);margin-bottom:1px}
 .info-desc{font-size:10px;color:var(--t2);line-height:1.45}
-.info-tog{display:flex;align-items:center;gap:4px;background:none;border:none;color:var(--grn);font-size:10px;font-weight:500;cursor:pointer;font-family:'Outfit',sans-serif;padding:0;margin-top:8px;-webkit-tap-highlight-color:transparent}
-.info-det{display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(0,229,153,0.1)}
+.info-tog{display:flex;align-items:center;gap:4px;background:none;border:none;color:var(--acc);font-size:10px;font-weight:500;cursor:pointer;font-family:'Noto Sans KR',sans-serif;padding:0;margin-top:8px}
+.info-det{display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(167,139,250,0.1)}
 .info-det.show{display:block}
 .info-det-txt{font-size:10px;color:var(--t2);line-height:1.65}
 .info-det-txt strong{color:var(--t1)}
-.ihl{display:inline-block;background:var(--grn-d);color:var(--grn);padding:0 4px;border-radius:3px;font-size:9px;font-weight:500}
+.ihl{display:inline-block;background:var(--acc-d);color:var(--acc);padding:0 4px;border-radius:3px;font-size:9px;font-weight:500}
 .tcmp{display:grid;grid-template-columns:1fr;gap:6px;margin-top:8px}
 .tcmp-box{background:var(--card);border:1px solid var(--brd);border-radius:6px;padding:7px 10px;text-align:center}
 .tcmp-box .lb{font-size:8px;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
@@ -60,24 +62,25 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t1);min-he
 .tcmp-arr{font-size:12px;color:var(--t3);text-align:center}
 
 /* === SUMMARY === */
-.srow{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 16px}
-.scard{background:var(--card);border:1px solid var(--brd);border-radius:9px;padding:12px 14px}
-.slbl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.srow{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 12px}
+.scard{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:12px 14px}
+.slbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;display:flex;align-items:center;gap:4px}
 .ttip{display:inline-flex;align-items:center;justify-content:center;width:12px;height:12px;border-radius:50%;background:var(--bg);border:1px solid var(--brd);font-size:7px;color:var(--t3);cursor:help;position:relative}
 .ttip:hover .ttip-box,.ttip:active .ttip-box{display:block}
-.ttip-box{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:4px;background:#22222e;border:1px solid var(--brd-l);border-radius:6px;padding:7px 9px;font-size:9px;color:var(--t2);line-height:1.4;width:160px;z-index:100;font-weight:400;text-transform:none;letter-spacing:0;box-shadow:0 6px 20px rgba(0,0,0,.4)}
-.sval{font-size:20px;font-weight:700;letter-spacing:-.5px}
+.ttip-box{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:4px;background:#111;border:1px solid var(--brd-l);border-radius:6px;padding:7px 9px;font-size:9px;color:var(--t2);line-height:1.4;width:160px;z-index:100;font-weight:400;text-transform:none;letter-spacing:0;box-shadow:0 6px 20px rgba(0,0,0,.6)}
+.sval{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;letter-spacing:-.5px}
 .ssub{font-size:9px;color:var(--t2);margin-top:2px}
 
 /* === MAIN === */
 .main{padding:0 16px 16px}
 .sec-hd{margin-bottom:10px}
 .sec-t{font-size:13px;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:5px}
-.sec-d{font-size:9px;color:var(--t3);margin-top:1px}
+.sec-d{font-size:10px;color:var(--t3);margin-top:1px}
 
-/* === BAR CHART (MOBILE-FIRST STACKED) === */
+/* === BAR CHART === */
 .chart-sec{margin-bottom:16px}
-.chart-box{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:14px}
+.chart-box{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:14px;position:relative}
+.chart-box.watermark::after{content:'Herdvibe.com';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:600;color:rgba(255,255,255,0.04);pointer-events:none;z-index:2;letter-spacing:2px}
 .bchart{display:flex;flex-direction:column;gap:2px}
 .brow{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.02)}
 .brow:last-child{border-bottom:none}
@@ -94,12 +97,12 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t1);min-he
 
 /* === PROTOCOL CARDS === */
 .pgrid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:16px}
-.pcard{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px;-webkit-tap-highlight-color:transparent}
+.pcard{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px}
 .pcard:active{border-color:var(--brd-l)}
 .pc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px}
 .pc-left{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
-.pc-rank{font-size:16px;font-weight:800;color:var(--t3);width:22px;text-align:center;flex-shrink:0}
-.pc-rank.t3{color:var(--grn)}
+.pc-rank{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:800;color:var(--t3);width:22px;text-align:center;flex-shrink:0}
+.pc-rank.t3{color:var(--acc)}
 .pc-ncol{min-width:0;flex:1}
 .pc-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pc-ko{font-size:10px;color:var(--t2)}
@@ -111,33 +114,32 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--t1);min-he
 .mb-burn{background:var(--red-d);color:var(--red)}
 .mb-stake{background:var(--pur-d);color:var(--pur)}
 .mb-dist{background:var(--cyn-d);color:var(--cyn)}
-
-.pc-amt{font-size:20px;font-weight:700;color:var(--grn);letter-spacing:-.5px}
+.pc-amt{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--grn);letter-spacing:-.5px}
 .pc-amt-sub{font-size:10px;color:var(--t3);margin-top:1px}
-
 .pc-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
 .pc-m{padding:7px 8px;background:var(--bg);border-radius:6px}
 .pc-ml{font-size:8px;color:var(--t3);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px}
-.pc-mv{font-size:12px;font-weight:600}
-
+.pc-mv{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600}
 .pc-ratio{padding:7px 8px;background:var(--bg);border-radius:6px}
 .pc-rh{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
 .pc-rl{font-size:8px;color:var(--t3);text-transform:uppercase;letter-spacing:.3px}
-.pc-rv{font-size:11px;font-weight:600}
+.pc-rv{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600}
 .pc-rt{height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
 .pc-rf{height:100%;border-radius:2px;transition:width .6s ease}
 
 /* === TABLE === */
 .tsec{margin-bottom:16px}
 .tbox{background:var(--card);border:1px solid var(--brd);border-radius:10px;overflow:hidden}
-.tscrl{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tscrl{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#333 transparent}
+.tscrl::-webkit-scrollbar{height:4px}
+.tscrl::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
 table{width:100%;border-collapse:collapse;min-width:680px}
-thead th{padding:9px 10px;font-size:9px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.6px;text-align:left;border-bottom:1px solid var(--brd);background:rgba(255,255,255,.01);white-space:nowrap;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+thead th{padding:9px 10px;font-size:9px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;text-align:left;border-bottom:1px solid var(--brd);white-space:nowrap;cursor:pointer;user-select:none}
 thead th:hover{color:var(--t2)}
-thead th.sorted{color:var(--grn)}
+thead th.sorted{color:var(--acc)}
 tbody tr{transition:background .1s}
-tbody tr:active{background:rgba(255,255,255,.02)}
-tbody td{padding:8px 10px;font-size:11px;border-bottom:1px solid rgba(255,255,255,.03);white-space:nowrap}
+tbody tr:hover{background:var(--card-h)}
+tbody td{padding:8px 10px;font-size:11px;border-bottom:1px solid #111;white-space:nowrap}
 .td-cb{font-size:8px;padding:2px 5px;border-radius:3px;background:var(--bg);border:1px solid var(--brd)}
 .td-mb{font-size:8px;padding:1px 4px;border-radius:3px;font-weight:600}
 .td-name{display:flex;flex-direction:column;gap:1px}
@@ -150,73 +152,78 @@ tbody td{padding:8px 10px;font-size:11px;border-bottom:1px solid rgba(255,255,25
 
 /* === LOADING / ERROR === */
 .ld-box{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 20px;gap:12px}
-.ld-spin{width:28px;height:28px;border:3px solid var(--brd);border-top-color:var(--grn);border-radius:50%;animation:spin .8s linear infinite}
+.ld-spin{width:28px;height:28px;border:3px solid var(--brd);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .ld-txt{font-size:11px;color:var(--t2)}
 .err-box{text-align:center;padding:40px 20px}
 .err-ic{font-size:28px;margin-bottom:8px}
 .err-txt{font-size:12px;color:var(--t2);margin-bottom:5px}
 .err-sub{font-size:10px;color:var(--t3);margin-bottom:12px}
-.retry{padding:6px 16px;background:var(--grn);color:#0a0a0f;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;-webkit-tap-highlight-color:transparent}
+.retry{padding:6px 16px;background:var(--acc);color:#000;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Noto Sans KR',sans-serif}
+
+/* === SHARE === */
+.share-bar{display:flex;gap:6px;justify-content:center;margin:12px 0 4px;flex-wrap:wrap}
+.share-btn{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:6px;border:1px solid #222;background:var(--card);color:var(--t2);font-size:11px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all 0.2s}
+.share-btn:hover{border-color:#444;color:var(--t1)}
+.share-btn svg{width:14px;height:14px;flex-shrink:0}
+.share-btn.twitter:hover{border-color:#1d9bf0;color:#1d9bf0}
+.share-btn.kakao:hover{border-color:#fee500;color:#fee500}
+.share-btn.telegram:hover{border-color:#26a5e4;color:#26a5e4}
+.share-btn.instagram:hover{border-color:#e1306c;color:#e1306c}
+.share-btn.instagram.copied{border-color:var(--grn);color:var(--grn)}
+.share-btn.copy:hover{border-color:var(--grn);color:var(--grn)}
+.share-btn.copied{border-color:var(--grn);color:var(--grn)}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--grn);color:#000;padding:10px 16px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transform:translateY(10px);transition:all 0.3s ease;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
 
 /* === FOOTER === */
 .ftr{padding:12px 16px;border-top:1px solid var(--brd);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
 .ftr-txt{font-size:9px;color:var(--t3)}
-.ftr-link{color:var(--grn);text-decoration:none}
+.ftr-link{color:var(--acc);text-decoration:none}
 
 /* === DESKTOP === */
 @media(min-width:768px){
-  .hdr{padding:20px 24px 16px}
-  .hdr h1{font-size:20px}
-  .info{margin:16px 24px 0;padding:16px 18px}
+  .info{margin:0 24px 12px;padding:16px 18px}
   .info-grid{grid-template-columns:repeat(3,1fr)}
   .tcmp{grid-template-columns:1fr auto 1fr}
-  .srow{grid-template-columns:repeat(4,1fr);padding:16px 24px;gap:10px}
-  .sval{font-size:22px}
+  .srow{grid-template-columns:repeat(4,1fr);padding:0 24px 16px;gap:10px}
   .main{padding:0 24px 24px}
   .pgrid{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
-  .ftr{padding:14px 24px}
+  .hdr{padding:12px 24px}
 }
 @media(min-width:1200px){
-  .hdr{padding:24px 32px 20px}
-  .hdr h1{font-size:22px}
-  .info{margin:20px 32px 0;padding:18px 20px}
-  .srow{padding:20px 32px;gap:12px}
+  .info{margin:0 32px 16px}
+  .srow{padding:0 32px 20px}
   .main{padding:0 32px 32px}
+  .hdr{padding:12px 32px}
 }
-@media(max-width:380px){
+@media(max-width:640px){
+  .top-nav{padding:0 10px}
+  .nav-title{font-size:12px}
   .sval{font-size:17px}
   .pc-amt{font-size:17px}
   .brow-name{font-size:11px}
+  .chart-box.watermark::after{font-size:20px}
 }
 
-/* === IMWEB IFRAME === */
 body.in-iframe{overflow:visible !important}
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--brd);border-radius:2px}
 </style>
 </head>
 <body>
 
+<nav class="top-nav">
+    <div class="nav-title">크립토 바이백 대시보드</div>
+</nav>
+
 <!-- HEADER -->
 <div class="hdr">
-  <div class="hdr-top">
-    <div class="hdr-left">
-      <div class="logo">BB</div>
-      <div>
-        <h1>크립토 바이백 대시보드</h1>
-        <div class="hdr-sub">PROTOCOL BUYBACK & HOLDER REVENUE TRACKER</div>
-      </div>
-    </div>
-    <div class="hdr-right">
-      <div class="ubadge"><span class="udot" id="sDot"></span><span id="uTime">로딩 중...</span></div>
-      <div class="psel">
-        <button class="pbtn on" data-p="24h" onclick="chgP('24h')">24H</button>
-        <button class="pbtn" data-p="7d" onclick="chgP('7d')">7D</button>
-        <button class="pbtn" data-p="30d" onclick="chgP('30d')">30D</button>
-      </div>
-    </div>
+  <div class="ubadge"><span class="udot" id="sDot"></span><span id="uTime">로딩 중...</span></div>
+  <div class="psel">
+    <button class="pbtn on" data-p="24h" onclick="chgP('24h')">24H</button>
+    <button class="pbtn" data-p="7d" onclick="chgP('7d')">7D</button>
+    <button class="pbtn" data-p="30d" onclick="chgP('30d')">30D</button>
   </div>
 </div>
 
@@ -226,24 +233,15 @@ body.in-iframe{overflow:visible !important}
   <div class="info-grid">
     <div class="info-item">
       <div class="info-ic" style="background:var(--grn-d);color:var(--grn)">💰</div>
-      <div>
-        <div class="info-lbl">Holders Revenue (홀더 수익)</div>
-        <div class="info-desc">프로토콜 수익 중 <strong>토큰 보유자에게 돌려주는 금액</strong>. 주식의 배당+자사주매입 개념.</div>
-      </div>
+      <div><div class="info-lbl">Holders Revenue (홀더 수익)</div><div class="info-desc">프로토콜 수익 중 <strong>토큰 보유자에게 돌려주는 금액</strong>. 주식의 배당+자사주매입 개념.</div></div>
     </div>
     <div class="info-item">
       <div class="info-ic" style="background:var(--red-d);color:var(--red)">🔥</div>
-      <div>
-        <div class="info-lbl">바이백 방식</div>
-        <div class="info-desc"><strong>🔥소각</strong>=토큰 삭제(공급↓) · <strong>💎스테이킹</strong>=보유자 보상 · <strong>💸배분</strong>=수익 분배</div>
-      </div>
+      <div><div class="info-lbl">바이백 방식</div><div class="info-desc"><strong>🔥소각</strong>=토큰 삭제(공급↓) · <strong>💎스테이킹</strong>=보유자 보상 · <strong>💸배분</strong>=수익 분배</div></div>
     </div>
     <div class="info-item">
       <div class="info-ic" style="background:var(--pur-d);color:var(--pur)">📊</div>
-      <div>
-        <div class="info-lbl">바이백 비율</div>
-        <div class="info-desc">Revenue 대비 Holders Revenue. <strong>높을수록 투자자 환원 적극적</strong>.</div>
-      </div>
+      <div><div class="info-lbl">바이백 비율</div><div class="info-desc">Revenue 대비 Holders Revenue. <strong>높을수록 투자자 환원 적극적</strong>.</div></div>
     </div>
   </div>
   <button class="info-tog" onclick="togDet()"><span id="togIc">▶</span> 주식 투자자를 위한 비교</button>
@@ -251,7 +249,7 @@ body.in-iframe{overflow:visible !important}
     <div class="tcmp">
       <div class="tcmp-box"><div class="lb">🏢 주식</div><div class="vl" style="color:var(--blu)">매출→영업이익→배당+자사주매입</div></div>
       <div class="tcmp-arr">≈</div>
-      <div class="tcmp-box"><div class="lb">⛓️ 크립토</div><div class="vl" style="color:var(--grn)">Fees→Revenue→Holders Revenue</div></div>
+      <div class="tcmp-box"><div class="lb">⛓️ 크립토</div><div class="vl" style="color:var(--acc)">Fees→Revenue→Holders Revenue</div></div>
     </div>
     <div class="info-det-txt" style="margin-top:10px">
       <strong>Fees</strong>=사용자 수수료→<span class="ihl">매출액</span> · <strong>Revenue</strong>=프로토콜 수익→<span class="ihl">영업이익</span> · <strong>Holders Revenue</strong>=토큰 보유자 환원→<span class="ihl">배당+자사주매입</span><br><br>
@@ -262,26 +260,10 @@ body.in-iframe{overflow:visible !important}
 
 <!-- SUMMARY -->
 <div class="srow">
-  <div class="scard">
-    <div class="slbl">전체 바이백 <span class="ttip">?<div class="ttip-box">보유자에게 환원된 총 금액</div></span></div>
-    <div class="sval" id="sHR">-</div>
-    <div class="ssub" id="sHRs">Holders Revenue 합계</div>
-  </div>
-  <div class="scard">
-    <div class="slbl">전체 Revenue</div>
-    <div class="sval" id="sRev">-</div>
-    <div class="ssub" id="sRevs">프로토콜 수익 합계</div>
-  </div>
-  <div class="scard">
-    <div class="slbl">바이백 비율</div>
-    <div class="sval" id="sRat">-</div>
-    <div class="ssub">HR ÷ Revenue</div>
-  </div>
-  <div class="scard">
-    <div class="slbl">프로토콜 수</div>
-    <div class="sval" id="sCnt">-</div>
-    <div class="ssub" id="sCnts">바이백 프로토콜</div>
-  </div>
+  <div class="scard"><div class="slbl">전체 바이백 <span class="ttip">?<div class="ttip-box">보유자에게 환원된 총 금액</div></span></div><div class="sval" id="sHR">-</div><div class="ssub" id="sHRs">Holders Revenue 합계</div></div>
+  <div class="scard"><div class="slbl">전체 Revenue</div><div class="sval" id="sRev">-</div><div class="ssub" id="sRevs">프로토콜 수익 합계</div></div>
+  <div class="scard"><div class="slbl">바이백 비율</div><div class="sval" id="sRat">-</div><div class="ssub">HR ÷ Revenue</div></div>
+  <div class="scard"><div class="slbl">프로토콜 수</div><div class="sval" id="sCnt">-</div><div class="ssub" id="sCnts">바이백 프로토콜</div></div>
 </div>
 
 <div class="main">
@@ -291,13 +273,12 @@ body.in-iframe{overflow:visible !important}
       <div class="sec-t">📊 프로토콜별 바이백 TOP 15</div>
       <div class="sec-d">Holders Revenue 기준 상위 프로토콜</div>
     </div>
-    <!-- Legend -->
     <div class="legend">
       <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>🔥 소각</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--pur)"></div>💎 스테이킹</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--cyn)"></div>💸 배분</div>
     </div>
-    <div class="chart-box">
+    <div class="chart-box watermark">
       <div class="bchart" id="barChart">
         <div class="ld-box"><div class="ld-spin"></div><div class="ld-txt">DefiLlama API 로딩 중...</div></div>
       </div>
@@ -317,187 +298,64 @@ body.in-iframe{overflow:visible !important}
       <div class="sec-t">🏆 전체 바이백 프로토콜</div>
       <div class="sec-d">열 터치 시 정렬</div>
     </div>
-    <div class="tbox">
-      <div class="tscrl">
-        <table>
-          <thead><tr>
-            <th onclick="srt('rank')">#</th>
-            <th onclick="srt('name')">프로토콜</th>
-            <th onclick="srt('chain')">체인</th>
-            <th>방식</th>
-            <th onclick="srt('holdersRevenue')" class="sorted">바이백 ▼</th>
-            <th onclick="srt('revenue')">Revenue</th>
-            <th onclick="srt('ratio')">비율</th>
-            <th onclick="srt('allTime')">누적</th>
-          </tr></thead>
-          <tbody id="tBody"><tr><td colspan="8" style="text-align:center;padding:30px;color:var(--t3)">로딩 중...</td></tr></tbody>
-        </table>
-      </div>
-    </div>
+    <div class="tbox"><div class="tscrl">
+      <table>
+        <thead><tr>
+          <th onclick="srt('rank')">#</th>
+          <th onclick="srt('name')">프로토콜</th>
+          <th onclick="srt('chain')">체인</th>
+          <th>방식</th>
+          <th onclick="srt('holdersRevenue')" class="sorted">바이백 ▼</th>
+          <th onclick="srt('revenue')">Revenue</th>
+          <th onclick="srt('ratio')">비율</th>
+          <th onclick="srt('allTime')">누적</th>
+        </tr></thead>
+        <tbody id="tBody"><tr><td colspan="8" style="text-align:center;padding:30px;color:var(--t3)">로딩 중...</td></tr></tbody>
+      </table>
+    </div></div>
+  </div>
+
+  <!-- Share -->
+  <div class="share-bar">
+    <button class="share-btn twitter" onclick="shareTwitter()"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>트위터</button>
+    <button class="share-btn kakao" onclick="shareKakao()"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-5.52 0-10 3.36-10 7.5 0 2.66 1.74 5 4.36 6.33-.14.53-.9 3.4-.93 3.61 0 0-.02.17.09.23.11.07.24.03.24.03.32-.04 3.7-2.42 4.28-2.83.62.09 1.27.13 1.96.13 5.52 0 10-3.36 10-7.5S17.52 3 12 3z"/></svg>카카오톡</button>
+    <button class="share-btn telegram" onclick="shareTelegram()"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>텔레그램</button>
+    <button class="share-btn instagram" onclick="shareInstagram(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>인스타그램</button>
+    <button class="share-btn copy" onclick="copyLink(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>링크복사</button>
   </div>
 </div>
 
 <div class="ftr">
   <span class="ftr-txt">데이터: <a href="https://defillama.com" target="_blank" class="ftr-link">DefiLlama</a> 무료 API · 실시간</span>
-  <span class="ftr-txt">클레버라 · Klevera</span>
+  <span class="ftr-txt" id="ftr-updated"></span>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
+const SHARE_URL='https://herdvibe.com/crypto-buyback';
+const SHARE_TITLE='크립토 바이백 대시보드 - 프로토콜 홀더 수익 추적';
+const SHARE_DESC='DeFi 프로토콜 바이백·소각·스테이킹 수익 실시간 비교 | Herdvibe';
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+function shareTwitter(){window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(SHARE_TITLE)}&url=${encodeURIComponent(SHARE_URL)}`,'_blank')}
+function shareKakao(){if(window.Kakao&&!Kakao.isInitialized())Kakao.init('a43ed7b39fac35458f4f9df925a279b5');if(window.Kakao){Kakao.Share.sendDefault({objectType:'feed',content:{title:SHARE_TITLE,description:SHARE_DESC,imageUrl:'https://herdvibe.com/og-buyback.png',link:{mobileWebUrl:SHARE_URL,webUrl:SHARE_URL}}})}}
+function shareTelegram(){window.open(`https://t.me/share/url?url=${encodeURIComponent(SHARE_URL)}&text=${encodeURIComponent(SHARE_TITLE)}`,'_blank')}
+function shareInstagram(btn){try{if(window.parent!==window){window.parent.postMessage({type:'copy',text:SHARE_URL},'*')}else{navigator.clipboard.writeText(SHARE_URL)}const orig=btn.innerHTML;btn.classList.add('copied');btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>복사됨!';showToast('링크가 복사되었습니다 - 인스타그램에 붙여넣기 하세요 ✓');setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML=orig},2000)}catch(e){showToast('복사 실패')}}
+function copyLink(btn){try{if(window.parent!==window){window.parent.postMessage({type:'copy',text:SHARE_URL},'*')}else{navigator.clipboard.writeText(SHARE_URL)}const orig=btn.innerHTML;btn.classList.add('copied');btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>복사됨!';showToast('링크가 복사되었습니다 ✓');setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML=orig},2000)}catch(e){showToast('복사 실패')}}
+
 // ===== KOREAN LABELS =====
-const KO={
-  'hyperliquid perps':'하이퍼리퀴드 무기한선물',
-  'pump.fun':'펌프펀 · 밈코인 런치패드',
-  'tron':'트론 · L1 체인',
-  'jupiter perpetual exchange':'주피터 무기한선물',
-  'yield basis':'일드 베이시스 · 수익 프로토콜',
-  'jupiter aggregator':'주피터 DEX 애그리게이터',
-  'aerodrome slipstream':'에어로드롬 · Base DEX',
-  'sky lending':'스카이 렌딩 · 구 MakerDAO',
-  'hyperliquid spot orderbook':'하이퍼리퀴드 현물거래',
-  'uniswap v3':'유니스왑 V3 · DEX',
-  'uniswap v2':'유니스왑 V2 · DEX',
-  'ether.fi liquid':'이더파이 리퀴드 스테이킹',
-  'clanker':'클랭커 · AI 토큰 런치패드',
-  'pancakeswap amm v3':'팬케이크스왑 · DEX',
-  'pancakeswap amm v2':'팬케이크스왑 V2 · DEX',
-  'hyperliquid l1':'하이퍼리퀴드 L1 체인',
-  'ore protocol':'오레 프로토콜',
-  'aave v3':'아베 V3 · 렌딩',
-  'aave v2':'아베 V2 · 렌딩',
-  'aave':'아베 · 렌딩',
-  'gmx':'GMX · 무기한선물',
-  'gmx v2':'GMX V2 · 무기한선물',
-  'raydium':'레이디움 · Solana DEX',
-  'lido':'리도 · 리퀴드 스테이킹',
-  'lido finance':'리도 · 리퀴드 스테이킹',
-  'compound v3':'컴파운드 · 렌딩',
-  'compound':'컴파운드 · 렌딩',
-  'maker':'메이커 · 구 MakerDAO',
-  'sky':'스카이 · 구 MakerDAO',
-  'curve dex':'커브 · 스테이블 DEX',
-  'sushiswap':'스시스왑 · DEX',
-  'sushi':'스시스왑 · DEX',
-  'trader joe':'트레이더조 · DEX',
-  'camelot':'카멜롯 · Arbitrum DEX',
-  'velodrome v2':'벨로드롬 · OP DEX',
-  'velodrome':'벨로드롬 · OP DEX',
-  'jito':'지토 · Solana MEV',
-  'morpho':'모포 · 렌딩',
-  'fluid':'플루이드 · 렌딩+DEX',
-  'ethereum':'이더리움 · L1 체인',
-  'bitcoin':'비트코인',
-  'benqi':'벤치 · Avalanche 렌딩',
-  'marinade':'마리네이드 · Solana 스테이킹',
-  'convex finance':'컨벡스 · Curve 부스터',
-  'pumpswap':'펌프스왑 · Pump.fun DEX',
-  'orca':'오르카 · Solana DEX',
-  'dydx':'dYdX · 무기한선물',
-  'drift':'드리프트 · Solana 무기한선물',
-  'kamino':'카미노 · Solana DeFi',
-  'base':'베이스 · L2 체인',
-  'solana':'솔라나 · L1 체인',
-  'bsc':'바이낸스 스마트체인',
-  'aerodrome':'에어로드롬 · Base DEX',
-  'sparkle':'스파클',
-  'spark':'스파크 · 렌딩',
-  'pendle':'펜들 · 수익률 거래',
-  'stargate':'스타게이트 · 크로스체인',
-  'radiant':'레이디언트 · 렌딩',
-  'synthetix':'신세틱스 · 파생상품',
-  'synapse':'시냅스 · 브릿지',
-  'pancakeswap':'팬케이크스왑 · DEX',
-  'balancer':'밸런서 · DEX',
-  'frax':'프랙스 · 스테이블코인',
-  'thorchain':'토르체인 · 크로스체인 DEX',
-  'eigenlayer':'아이겐레이어 · 리스테이킹',
-  'renzo':'렌조 · 리스테이킹',
-  'ethena':'에테나 · USDe 발행',
-  'usual':'유저얼 · RWA',
-  'mantle':'맨틀 · L2 체인',
-  'blast':'블래스트 · L2 체인',
-  'scroll':'스크롤 · L2 체인',
-  'linea':'리네아 · L2 체인',
-  'polygon':'폴리곤',
-  'arbitrum':'아비트럼 · L2 체인',
-  'optimism':'옵티미즘 · L2 체인',
-  'avalanche':'아발란체 · L1 체인',
-  'sui':'수이 · L1 체인',
-  'aptos':'앱토스 · L1 체인',
-  'near':'니어 · L1 체인',
-};
-function getKo(name){
-  const n=name.toLowerCase();
-  if(KO[n])return KO[n];
-  for(const[k,v]of Object.entries(KO)){if(n.includes(k)||k.includes(n))return v}
-  return'';
-}
+const KO={'hyperliquid perps':'하이퍼리퀴드 무기한선물','pump.fun':'펌프펀 · 밈코인 런치패드','tron':'트론 · L1 체인','jupiter perpetual exchange':'주피터 무기한선물','yield basis':'일드 베이시스 · 수익 프로토콜','jupiter aggregator':'주피터 DEX 애그리게이터','aerodrome slipstream':'에어로드롬 · Base DEX','sky lending':'스카이 렌딩 · 구 MakerDAO','hyperliquid spot orderbook':'하이퍼리퀴드 현물거래','uniswap v3':'유니스왑 V3 · DEX','uniswap v2':'유니스왑 V2 · DEX','ether.fi liquid':'이더파이 리퀴드 스테이킹','clanker':'클랭커 · AI 토큰 런치패드','pancakeswap amm v3':'팬케이크스왑 · DEX','pancakeswap amm v2':'팬케이크스왑 V2 · DEX','hyperliquid l1':'하이퍼리퀴드 L1 체인','ore protocol':'오레 프로토콜','aave v3':'아베 V3 · 렌딩','aave v2':'아베 V2 · 렌딩','aave':'아베 · 렌딩','gmx':'GMX · 무기한선물','gmx v2':'GMX V2 · 무기한선물','raydium':'레이디움 · Solana DEX','lido':'리도 · 리퀴드 스테이킹','lido finance':'리도 · 리퀴드 스테이킹','compound v3':'컴파운드 · 렌딩','compound':'컴파운드 · 렌딩','maker':'메이커 · 구 MakerDAO','sky':'스카이 · 구 MakerDAO','curve dex':'커브 · 스테이블 DEX','sushiswap':'스시스왑 · DEX','sushi':'스시스왑 · DEX','trader joe':'트레이더조 · DEX','camelot':'카멜롯 · Arbitrum DEX','velodrome v2':'벨로드롬 · OP DEX','velodrome':'벨로드롬 · OP DEX','jito':'지토 · Solana MEV','morpho':'모포 · 렌딩','fluid':'플루이드 · 렌딩+DEX','ethereum':'이더리움 · L1 체인','bitcoin':'비트코인','benqi':'벤치 · Avalanche 렌딩','marinade':'마리네이드 · Solana 스테이킹','convex finance':'컨벡스 · Curve 부스터','pumpswap':'펌프스왑 · Pump.fun DEX','orca':'오르카 · Solana DEX','dydx':'dYdX · 무기한선물','drift':'드리프트 · Solana 무기한선물','kamino':'카미노 · Solana DeFi','base':'베이스 · L2 체인','solana':'솔라나 · L1 체인','bsc':'바이낸스 스마트체인','aerodrome':'에어로드롬 · Base DEX','sparkle':'스파클','spark':'스파크 · 렌딩','pendle':'펜들 · 수익률 거래','stargate':'스타게이트 · 크로스체인','radiant':'레이디언트 · 렌딩','synthetix':'신세틱스 · 파생상품','synapse':'시냅스 · 브릿지','pancakeswap':'팬케이크스왑 · DEX','balancer':'밸런서 · DEX','frax':'프랙스 · 스테이블코인','thorchain':'토르체인 · 크로스체인 DEX','eigenlayer':'아이겐레이어 · 리스테이킹','renzo':'렌조 · 리스테이킹','ethena':'에테나 · USDe 발행','usual':'유저얼 · RWA','mantle':'맨틀 · L2 체인','blast':'블래스트 · L2 체인','scroll':'스크롤 · L2 체인','linea':'리네아 · L2 체인','polygon':'폴리곤','arbitrum':'아비트럼 · L2 체인','optimism':'옵티미즘 · L2 체인','avalanche':'아발란체 · L1 체인','sui':'수이 · L1 체인','aptos':'앱토스 · L1 체인','near':'니어 · L1 체인'};
+function getKo(name){const n=name.toLowerCase();if(KO[n])return KO[n];for(const[k,v]of Object.entries(KO)){if(n.includes(k)||k.includes(n))return v}return''}
 
 // ===== CHAIN COLORS =====
-const CC={
-  'Ethereum':['#627eea','rgba(98,126,234,.15)'],'Solana':['#00e599','rgba(0,229,153,.15)'],
-  'BSC':['#f0b90b','rgba(240,185,11,.15)'],'Arbitrum':['#28a0f0','rgba(40,160,240,.15)'],
-  'Base':['#0052ff','rgba(0,82,255,.15)'],'Polygon':['#8247e5','rgba(130,71,229,.15)'],
-  'Optimism':['#ff0420','rgba(255,4,32,.15)'],'OP Mainnet':['#ff0420','rgba(255,4,32,.15)'],
-  'Avalanche':['#e84142','rgba(232,65,66,.15)'],'Tron':['#eb0029','rgba(235,0,41,.15)'],
-  'Sui':['#6fbcf0','rgba(111,188,240,.15)'],'Aptos':['#2ed8a3','rgba(46,216,163,.15)'],
-  'Sonic':['#ff6600','rgba(255,102,0,.15)'],
-  'Hyperliquid':['#6ee7b7','rgba(110,231,183,.15)'],'Hyperliquid L1':['#6ee7b7','rgba(110,231,183,.15)'],
-  'Monad':['#836ef9','rgba(131,110,249,.15)'],'Linea':['#61dfff','rgba(97,223,255,.15)'],
-  'Blast':['#fcfc03','rgba(252,252,3,.15)'],
-  'zkSync Era':['#8c8dfc','rgba(140,141,252,.15)'],'ZKsync Era':['#8c8dfc','rgba(140,141,252,.15)'],
-  'Bitcoin':['#f7931a','rgba(247,147,26,.15)'],'Berachain':['#f5a623','rgba(245,166,35,.15)'],
-  'TON':['#0098ea','rgba(0,152,234,.15)'],'Near':['#00ec97','rgba(0,236,151,.15)'],
-  'Starknet':['#ec796b','rgba(236,121,107,.15)'],'Plasma':['#44e55c','rgba(68,229,92,.15)'],
-  'Mantle':['#9aa0a6','rgba(154,160,166,.15)'],'Scroll':['#ffeeda','rgba(255,238,218,.15)'],
-  'Cronos':['#4169e1','rgba(65,105,225,.15)'],'Fantom':['#1969ff','rgba(25,105,255,.15)'],
-  'Sei':['#e14c4c','rgba(225,76,76,.15)'],'Injective':['#00f2fe','rgba(0,242,254,.15)'],
-  'Mode':['#dffe00','rgba(223,254,0,.15)'],'Gnosis':['#3e6957','rgba(62,105,87,.15)'],
-  'Kaia':['#ff3d00','rgba(255,61,0,.15)'],'Multi':['#888','rgba(136,136,136,.15)'],
-};
-function gc(c){
-  if(CC[c])return{color:CC[c][0],bg:CC[c][1]};
-  let h=0;for(let i=0;i<c.length;i++)h=c.charCodeAt(i)+((h<<5)-h);
-  const hu=Math.abs(h)%360,s=60+(Math.abs(h>>8)%20),l=55+(Math.abs(h>>16)%15);
-  const co=`hsl(${hu},${s}%,${l}%)`,bg=`hsla(${hu},${s}%,${l}%,.15)`;
-  CC[c]=[co,bg];return{color:co,bg};
-}
+const CC={'Ethereum':['#627eea','rgba(98,126,234,.15)'],'Solana':['#00e599','rgba(0,229,153,.15)'],'BSC':['#f0b90b','rgba(240,185,11,.15)'],'Arbitrum':['#28a0f0','rgba(40,160,240,.15)'],'Base':['#0052ff','rgba(0,82,255,.15)'],'Polygon':['#8247e5','rgba(130,71,229,.15)'],'Optimism':['#ff0420','rgba(255,4,32,.15)'],'OP Mainnet':['#ff0420','rgba(255,4,32,.15)'],'Avalanche':['#e84142','rgba(232,65,66,.15)'],'Tron':['#eb0029','rgba(235,0,41,.15)'],'Sui':['#6fbcf0','rgba(111,188,240,.15)'],'Aptos':['#2ed8a3','rgba(46,216,163,.15)'],'Sonic':['#ff6600','rgba(255,102,0,.15)'],'Hyperliquid':['#6ee7b7','rgba(110,231,183,.15)'],'Hyperliquid L1':['#6ee7b7','rgba(110,231,183,.15)'],'Monad':['#836ef9','rgba(131,110,249,.15)'],'Linea':['#61dfff','rgba(97,223,255,.15)'],'Blast':['#fcfc03','rgba(252,252,3,.15)'],'zkSync Era':['#8c8dfc','rgba(140,141,252,.15)'],'ZKsync Era':['#8c8dfc','rgba(140,141,252,.15)'],'Bitcoin':['#f7931a','rgba(247,147,26,.15)'],'Berachain':['#f5a623','rgba(245,166,35,.15)'],'TON':['#0098ea','rgba(0,152,234,.15)'],'Near':['#00ec97','rgba(0,236,151,.15)'],'Starknet':['#ec796b','rgba(236,121,107,.15)'],'Plasma':['#44e55c','rgba(68,229,92,.15)'],'Mantle':['#9aa0a6','rgba(154,160,166,.15)'],'Scroll':['#ffeeda','rgba(255,238,218,.15)'],'Cronos':['#4169e1','rgba(65,105,225,.15)'],'Fantom':['#1969ff','rgba(25,105,255,.15)'],'Sei':['#e14c4c','rgba(225,76,76,.15)'],'Injective':['#00f2fe','rgba(0,242,254,.15)'],'Mode':['#dffe00','rgba(223,254,0,.15)'],'Gnosis':['#3e6957','rgba(62,105,87,.15)'],'Kaia':['#ff3d00','rgba(255,61,0,.15)'],'Multi':['#888','rgba(136,136,136,.15)']};
+function gc(c){if(CC[c])return{color:CC[c][0],bg:CC[c][1]};let h=0;for(let i=0;i<c.length;i++)h=c.charCodeAt(i)+((h<<5)-h);const hu=Math.abs(h)%360,s=60+(Math.abs(h>>8)%20),l=55+(Math.abs(h>>16)%15);const co=`hsl(${hu},${s}%,${l}%)`,bg=`hsla(${hu},${s}%,${l}%,.15)`;CC[c]=[co,bg];return{color:co,bg}}
 
 // ===== METHODS =====
-const MT={
-  'pump.fun':'burn','pump':'burn','pumpswap':'burn',
-  'hyperliquid perps':'burn','hyperliquid':'burn','hyperliquid spot orderbook':'burn','hyperliquid l1':'burn',
-  'ethereum':'burn','tron':'burn','bitcoin':'burn','solana':'burn',
-  'makerdao':'burn','maker':'burn','sky':'burn','sky lending':'burn',
-  'raydium':'burn','orca':'burn',
-  'jupiter':'burn','jupiter perpetual exchange':'burn','jupiter aggregator':'burn','jupiter dca':'burn',
-  'aerodrome':'stake','aerodrome slipstream':'stake',
-  'velodrome v2':'stake','velodrome':'stake',
-  'aave':'stake','aave v3':'stake','aave v2':'stake',
-  'curve dex':'stake','curve finance':'stake','convex finance':'stake',
-  'gmx':'stake','gmx v2':'stake',
-  'uniswap v3':'dist','uniswap':'dist','uniswap v2':'dist',
-  'sushi':'burn','sushiswap':'burn',
-  'lido':'dist','lido finance':'dist',
-  'compound':'dist','compound v3':'dist',
-  'yield basis':'burn',
-  'pancakeswap amm v3':'burn','pancakeswap amm v2':'burn','pancakeswap':'burn',
-  'morpho':'dist','fluid':'dist',
-  'jito':'stake','marinade':'stake','benqi':'stake',
-  'trader joe':'burn','camelot':'stake',
-  'clanker':'burn','ether.fi liquid':'stake',
-  'ore protocol':'burn','dydx':'stake','drift':'stake',
-  'pendle':'dist','stargate':'burn',
-  'synthetix':'burn','balancer':'dist',
-  'thorchain':'burn','eigenlayer':'stake',
-  'ethena':'burn','spark':'dist',
-};
+const MT={'pump.fun':'burn','pump':'burn','pumpswap':'burn','hyperliquid perps':'burn','hyperliquid':'burn','hyperliquid spot orderbook':'burn','hyperliquid l1':'burn','ethereum':'burn','tron':'burn','bitcoin':'burn','solana':'burn','makerdao':'burn','maker':'burn','sky':'burn','sky lending':'burn','raydium':'burn','orca':'burn','jupiter':'burn','jupiter perpetual exchange':'burn','jupiter aggregator':'burn','jupiter dca':'burn','aerodrome':'stake','aerodrome slipstream':'stake','velodrome v2':'stake','velodrome':'stake','aave':'stake','aave v3':'stake','aave v2':'stake','curve dex':'stake','curve finance':'stake','convex finance':'stake','gmx':'stake','gmx v2':'stake','uniswap v3':'dist','uniswap':'dist','uniswap v2':'dist','sushi':'burn','sushiswap':'burn','lido':'dist','lido finance':'dist','compound':'dist','compound v3':'dist','yield basis':'burn','pancakeswap amm v3':'burn','pancakeswap amm v2':'burn','pancakeswap':'burn','morpho':'dist','fluid':'dist','jito':'stake','marinade':'stake','benqi':'stake','trader joe':'burn','camelot':'stake','clanker':'burn','ether.fi liquid':'stake','ore protocol':'burn','dydx':'stake','drift':'stake','pendle':'dist','stargate':'burn','synthetix':'burn','balancer':'dist','thorchain':'burn','eigenlayer':'stake','ethena':'burn','spark':'dist'};
 function gm(n){const l=n.toLowerCase();if(MT[l])return MT[l];for(const[k,v]of Object.entries(MT)){if(l.includes(k)||k.includes(l))return v}return null}
-function ml(m){
-  if(m==='burn')return{i:'🔥',t:'소각',c:'mb-burn'};
-  if(m==='stake')return{i:'💎',t:'스테이킹',c:'mb-stake'};
-  if(m==='dist')return{i:'💸',t:'배분',c:'mb-dist'};
-  return{i:'',t:'-',c:''};
-}
+function ml(m){if(m==='burn')return{i:'🔥',t:'소각',c:'mb-burn'};if(m==='stake')return{i:'💎',t:'스테이킹',c:'mb-stake'};if(m==='dist')return{i:'💸',t:'배분',c:'mb-dist'};return{i:'',t:'-',c:''}}
 function mdc(m){return m==='burn'?'var(--red)':m==='stake'?'var(--pur)':m==='dist'?'var(--cyn)':'var(--t3)'}
 
 // ===== STATE =====
@@ -506,35 +364,18 @@ function fC(v){if(v==null||isNaN(v))return'-';if(Math.abs(v)>=1e9)return'$'+(v/1
 function fP(v){return(v==null||isNaN(v))?'-':v.toFixed(1)+'%'}
 function pk(){return cP==='24h'?'total24h':cP==='7d'?'total7d':'total30d'}
 
-function chgP(p){
-  cP=p;
-  document.querySelectorAll('.pbtn').forEach(b=>b.classList.remove('on'));
-  document.querySelector(`[data-p="${p}"]`).classList.add('on');
-  if(cD)renderAll(cD);
-}
-function togDet(){
-  const d=document.getElementById('infoDet'),i=document.getElementById('togIc');
-  d.classList.toggle('show');i.textContent=d.classList.contains('show')?'▼':'▶';
-}
+function chgP(p){cP=p;document.querySelectorAll('.pbtn').forEach(b=>b.classList.remove('on'));document.querySelector(`[data-p="${p}"]`).classList.add('on');if(cD)renderAll(cD)}
+function togDet(){const d=document.getElementById('infoDet'),i=document.getElementById('togIc');d.classList.toggle('show');i.textContent=d.classList.contains('show')?'▼':'▶'}
 
 // ===== FETCH =====
 async function fetchData(){
   try{
-    const[fR,hR,rR]=await Promise.all([
-      fetch('https://api.llama.fi/overview/fees'),
-      fetch('https://api.llama.fi/overview/fees?dataType=dailyHoldersRevenue'),
-      fetch('https://api.llama.fi/overview/fees?dataType=dailyRevenue')
-    ]);
+    const[fR,hR,rR]=await Promise.all([fetch('https://api.llama.fi/overview/fees'),fetch('https://api.llama.fi/overview/fees?dataType=dailyHoldersRevenue'),fetch('https://api.llama.fi/overview/fees?dataType=dailyRevenue')]);
     if(!fR.ok||!hR.ok||!rR.ok)throw new Error('err');
     cD={f:await fR.json(),h:await hR.json(),r:await rR.json()};
     document.getElementById('sDot').classList.remove('err');
     renderAll(cD);
-  }catch(e){
-    console.error(e);
-    document.getElementById('sDot').classList.add('err');
-    document.getElementById('uTime').textContent='연결 실패';
-    showErr();
-  }
+  }catch(e){console.error(e);document.getElementById('sDot').classList.add('err');document.getElementById('uTime').textContent='연결 실패';showErr()}
 }
 function showErr(){
   document.getElementById('barChart').innerHTML=`<div class="err-box"><div class="err-ic">⚠️</div><div class="err-txt">API 연결 실패</div><div class="err-sub">GitHub Pages에 배포하면 정상 동작합니다</div><button class="retry" onclick="fetchData()">다시 시도</button></div>`;
@@ -547,25 +388,14 @@ function renderAll(d){
   const k=pk(),hM={},rM={};
   (d.h.protocols||[]).forEach(h=>{hM[h.name]=h});
   (d.r.protocols||[]).forEach(r=>{rM[r.name]=r});
-
   const protos=(d.f.protocols||[]).map(p=>{
     const hm=hM[p.name],rm=rM[p.name];
     const hr=hm?(hm[k]||0):0,rev=rm?(rm[k]||0):0,fees=p[k]||0;
     const at=hm?(hm.totalAllTime||0):0;
-    return{
-      name:p.name||'?',chains:p.chains||[],
-      chain:(p.chains&&p.chains[0])||'Multi',
-      category:p.category||'-',
-      fees,revenue:rev,holdersRevenue:hr,allTime:at,
-      ratio:rev>0?(hr/rev*100):0,
-      method:gm(p.name||''),
-      ko:getKo(p.name||'')
-    };
+    return{name:p.name||'?',chains:p.chains||[],chain:(p.chains&&p.chains[0])||'Multi',category:p.category||'-',fees,revenue:rev,holdersRevenue:hr,allTime:at,ratio:rev>0?(hr/rev*100):0,method:gm(p.name||''),ko:getKo(p.name||'')};
   }).filter(p=>p.holdersRevenue>0);
-
   const tHR=protos.reduce((s,p)=>s+p.holdersRevenue,0);
   const tRev=protos.reduce((s,p)=>s+p.revenue,0);
-
   document.getElementById('sHR').textContent=fC(tHR);
   document.getElementById('sHRs').textContent=`바이백 합계 (${cP})`;
   document.getElementById('sRev').textContent=fC(tRev);
@@ -573,15 +403,10 @@ function renderAll(d){
   document.getElementById('sRat').textContent=fP(tRev>0?tHR/tRev*100:0);
   document.getElementById('sCnt').textContent=protos.length;
   document.getElementById('sCnts').textContent=`바이백 프로토콜 (${cP})`;
-
   const now=new Date();
   document.getElementById('uTime').textContent=`${now.getMonth()+1}/${now.getDate()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-
   const sorted=[...protos].sort((a,b)=>b.holdersRevenue-a.holdersRevenue);
-  renderBar(sorted.slice(0,15));
-  renderCards(sorted.slice(0,10));
-  renderTable(protos);
-  sendH();
+  renderBar(sorted.slice(0,15));renderCards(sorted.slice(0,10));renderTable(protos);sendH();
 }
 
 function renderBar(list){
@@ -589,20 +414,7 @@ function renderBar(list){
   const mx=list[0].holdersRevenue;
   document.getElementById('barChart').innerHTML=list.map(p=>{
     const cc=gc(p.chain),pct=mx>0?(p.holdersRevenue/mx*100):0,md=mdc(p.method);
-    return`<div class="brow">
-      <div class="brow-top">
-        <div class="brow-name-area">
-          <div class="brow-ci" style="background:${cc.bg};color:${cc.color}">${p.chain.charAt(0)}</div>
-          <span class="brow-mdot" style="background:${md}"></span>
-          <div class="brow-names">
-            <span class="brow-name">${p.name}</span>
-            ${p.ko?`<span class="brow-ko">${p.ko}</span>`:''}
-          </div>
-        </div>
-        <div class="brow-val mono" style="color:${cc.color}">${fC(p.holdersRevenue)}</div>
-      </div>
-      <div class="brow-bar"><div class="brow-fill" style="width:0%;background:linear-gradient(90deg,${cc.color},${cc.color}99)" data-w="${pct}"></div></div>
-    </div>`;
+    return`<div class="brow"><div class="brow-top"><div class="brow-name-area"><div class="brow-ci" style="background:${cc.bg};color:${cc.color}">${p.chain.charAt(0)}</div><span class="brow-mdot" style="background:${md}"></span><div class="brow-names"><span class="brow-name">${p.name}</span>${p.ko?`<span class="brow-ko">${p.ko}</span>`:''}</div></div><div class="brow-val mono" style="color:${cc.color}">${fC(p.holdersRevenue)}</div></div><div class="brow-bar"><div class="brow-fill" style="width:0%;background:linear-gradient(90deg,${cc.color},${cc.color}99)" data-w="${pct}"></div></div></div>`;
   }).join('');
   requestAnimationFrame(()=>{setTimeout(()=>{document.querySelectorAll('.brow-fill').forEach(el=>{el.style.width=el.dataset.w+'%'})},50)});
 }
@@ -611,82 +423,24 @@ function renderCards(list){
   document.getElementById('pGrid').innerHTML=list.map((p,i)=>{
     const cc=gc(p.chain),m=p.method?ml(p.method):null;
     const r=p.ratio,rc=r>50?'var(--grn)':r>20?'var(--org)':'var(--t2)';
-    const cbs=(p.chains.length>0?p.chains.slice(0,2):[p.chain]).map(c=>{
-      const x=gc(c);return`<span class="cbadge" style="color:${x.color};border-color:${x.color}30"><span class="cbadge-ic" style="background:${x.bg};color:${x.color}">${c.charAt(0)}</span>${c}</span>`;
-    }).join('');
-    return`<div class="pcard">
-      <div class="pc-top">
-        <div class="pc-left">
-          <span class="pc-rank ${i<3?'t3':''}">${i+1}</span>
-          <div class="pc-ncol">
-            <div class="pc-name">${p.name}</div>
-            ${p.ko?`<div class="pc-ko">${p.ko}</div>`:''}
-            <div class="pc-cat">${p.category}</div>
-          </div>
-        </div>
-        <div class="pc-badges">
-          ${m?`<span class="mbadge ${m.c}">${m.i} ${m.t}${r>=95?' 100%':''}</span>`:''}
-        </div>
-      </div>
-      <div style="display:flex;gap:4px;flex-wrap:wrap">${cbs}</div>
-      <div>
-        <div class="pc-amt">${fC(p.holdersRevenue)}</div>
-        ${p.allTime>0?`<div class="pc-amt-sub">누적 바이백: ${fC(p.allTime)}</div>`:''}
-      </div>
-      <div class="pc-metrics">
-        <div class="pc-m"><div class="pc-ml">Revenue</div><div class="pc-mv">${fC(p.revenue)}</div></div>
-        <div class="pc-m"><div class="pc-ml">Fees</div><div class="pc-mv">${fC(p.fees)}</div></div>
-        <div class="pc-m"><div class="pc-ml">바이백 비율</div><div class="pc-mv" style="color:${rc}">${fP(r)}</div></div>
-      </div>
-      <div class="pc-ratio">
-        <div class="pc-rh"><span class="pc-rl">Revenue → 보유자 환원</span><span class="pc-rv" style="color:${rc}">${fP(r)}</span></div>
-        <div class="pc-rt"><div class="pc-rf" style="width:${Math.min(r,100)}%;background:${rc}"></div></div>
-      </div>
-    </div>`;
+    const cbs=(p.chains.length>0?p.chains.slice(0,2):[p.chain]).map(c=>{const x=gc(c);return`<span class="cbadge" style="color:${x.color};border-color:${x.color}30"><span class="cbadge-ic" style="background:${x.bg};color:${x.color}">${c.charAt(0)}</span>${c}</span>`}).join('');
+    return`<div class="pcard"><div class="pc-top"><div class="pc-left"><span class="pc-rank ${i<3?'t3':''}">${i+1}</span><div class="pc-ncol"><div class="pc-name">${p.name}</div>${p.ko?`<div class="pc-ko">${p.ko}</div>`:''}<div class="pc-cat">${p.category}</div></div></div><div class="pc-badges">${m?`<span class="mbadge ${m.c}">${m.i} ${m.t}${r>=95?' 100%':''}</span>`:''}</div></div><div style="display:flex;gap:4px;flex-wrap:wrap">${cbs}</div><div><div class="pc-amt">${fC(p.holdersRevenue)}</div>${p.allTime>0?`<div class="pc-amt-sub">누적 바이백: ${fC(p.allTime)}</div>`:''}</div><div class="pc-metrics"><div class="pc-m"><div class="pc-ml">Revenue</div><div class="pc-mv">${fC(p.revenue)}</div></div><div class="pc-m"><div class="pc-ml">Fees</div><div class="pc-mv">${fC(p.fees)}</div></div><div class="pc-m"><div class="pc-ml">바이백 비율</div><div class="pc-mv" style="color:${rc}">${fP(r)}</div></div></div><div class="pc-ratio"><div class="pc-rh"><span class="pc-rl">Revenue → 보유자 환원</span><span class="pc-rv" style="color:${rc}">${fP(r)}</span></div><div class="pc-rt"><div class="pc-rf" style="width:${Math.min(r,100)}%;background:${rc}"></div></div></div></div>`;
   }).join('');
 }
 
 function renderTable(protos){
-  const sorted=[...protos].sort((a,b)=>{
-    const d=cS.dir==='desc'?-1:1,k=cS.key;
-    if(k==='name'||k==='chain'||k==='category')return d*-1*(a[k]||'').localeCompare(b[k]||'');
-    return d*((b[k]||0)-(a[k]||0));
-  }).slice(0,30);
+  const sorted=[...protos].sort((a,b)=>{const d=cS.dir==='desc'?-1:1,k=cS.key;if(k==='name'||k==='chain'||k==='category')return d*-1*(a[k]||'').localeCompare(b[k]||'');return d*((b[k]||0)-(a[k]||0))}).slice(0,30);
   document.getElementById('tBody').innerHTML=sorted.map((p,i)=>{
     const cc=gc(p.chain),m=p.method?ml(p.method):null;
     const rc=p.ratio>50?'var(--grn)':p.ratio>20?'var(--org)':'var(--t2)';
-    return`<tr>
-      <td class="mono" style="color:var(--t3)">${i+1}</td>
-      <td><div class="td-name"><span style="font-weight:500">${p.name}</span>${p.ko?`<span class="td-ko">${p.ko}</span>`:''}</div></td>
-      <td><span class="td-cb" style="border-color:${cc.color}40;color:${cc.color}">${p.chain}</span></td>
-      <td>${m?`<span class="td-mb ${m.c}">${m.i}${m.t}</span>`:'-'}</td>
-      <td class="mono" style="font-weight:600;color:var(--grn)">${fC(p.holdersRevenue)}</td>
-      <td class="mono">${fC(p.revenue)}</td>
-      <td class="mono" style="color:${rc}">${fP(p.ratio)}</td>
-      <td class="mono" style="color:var(--t2)">${p.allTime>0?fC(p.allTime):'-'}</td>
-    </tr>`;
+    return`<tr><td class="mono" style="color:var(--t3)">${i+1}</td><td><div class="td-name"><span style="font-weight:500">${p.name}</span>${p.ko?`<span class="td-ko">${p.ko}</span>`:''}</div></td><td><span class="td-cb" style="border-color:${cc.color}40;color:${cc.color}">${p.chain}</span></td><td>${m?`<span class="td-mb ${m.c}">${m.i}${m.t}</span>`:'-'}</td><td class="mono" style="font-weight:600;color:var(--grn)">${fC(p.holdersRevenue)}</td><td class="mono">${fC(p.revenue)}</td><td class="mono" style="color:${rc}">${fP(p.ratio)}</td><td class="mono" style="color:var(--t2)">${p.allTime>0?fC(p.allTime):'-'}</td></tr>`;
   }).join('');
 }
 
-function srt(key){
-  if(cS.key===key)cS.dir=cS.dir==='desc'?'asc':'desc';
-  else cS={key,dir:'desc'};
-  document.querySelectorAll('thead th').forEach(th=>th.classList.remove('sorted'));
-  if(cD)renderAll(cD);
-}
+function srt(key){if(cS.key===key)cS.dir=cS.dir==='desc'?'asc':'desc';else cS={key,dir:'desc'};document.querySelectorAll('thead th').forEach(th=>th.classList.remove('sorted'));if(cD)renderAll(cD)}
 
-// ===== IMWEB IFRAME AUTO-HEIGHT =====
-function sendH(){
-  try{
-    const h=document.documentElement.scrollHeight;
-    window.parent.postMessage({type:'resize',height:h},'*');
-    window.parent.postMessage(JSON.stringify({type:'resize',height:h}),'*');
-    if(window.frameElement){
-      window.frameElement.style.height=h+'px';
-      window.frameElement.style.overflow='visible';
-    }
-  }catch(e){}
-}
+// ===== IFRAME AUTO-HEIGHT =====
+function sendH(){try{const h=document.documentElement.scrollHeight;window.parent.postMessage({type:'resize',height:h},'*');window.parent.postMessage(JSON.stringify({type:'resize',height:h}),'*');if(window.frameElement){window.frameElement.style.height=h+'px';window.frameElement.style.overflow='visible'}}catch(e){}}
 if(window!==window.top){document.body.classList.add('in-iframe')}
 window.addEventListener('resize',()=>{clearTimeout(window._rto);window._rto=setTimeout(()=>{if(cD)sendH()},150)});
 new MutationObserver(()=>{sendH()}).observe(document.body,{childList:true,subtree:true});
